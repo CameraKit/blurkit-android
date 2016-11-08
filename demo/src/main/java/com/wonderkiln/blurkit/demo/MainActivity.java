@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        blurLayout = (BlurLayout) findViewById(R.id.wkBlurLayout);
+        blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
         imageView.animate().scaleX(movement).scaleY(movement).setDuration(1000).setListener(new AnimatorListenerAdapter() {

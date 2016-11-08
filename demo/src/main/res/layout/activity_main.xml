@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wonderkiln.wkblur_demo.MainActivity">
+    tools:context="com.wonderkiln.blurkit.demo.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -14,7 +14,7 @@
         android:scaleType="fitXY"/>
 
     <com.wonderkiln.blurkit.BlurLayout
-        android:id="@+id/wkBlurLayout"
+        android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_alignParentBottom="true"/>
