@@ -13,7 +13,7 @@
         android:src="@drawable/cat"
         android:scaleType="fitXY"/>
 
-    <com.wonderkiln.blurkit.BlurLayout
+    <com.wonderkiln.blurkit.DynamicBlurLayout
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"

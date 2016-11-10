@@ -7,10 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
-import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import net.qiujuer.genius.blur.StackBlur;
@@ -24,9 +22,8 @@ import java.lang.ref.WeakReference;
  *
  * @attr ref R.styleable.BlurLayout_downscaleFactor
  * @attr ref R.styleable.BlurLayout_blurRadius
- * @attr ref R.styleable.BlurLayout_fps
  */
-public class BlurLayout extends FrameLayout {
+abstract class BlurLayout extends FrameLayout {
 
     // Customizable attributes
 
@@ -36,18 +33,10 @@ public class BlurLayout extends FrameLayout {
     /** Blur radius passed directly to stackblur library. */
     private int mBlurRadius;
 
-    /** Number of blur invalidations to do per second.  */
-    private int mFPS;
-
-
     // Calculated class dependencies
 
     /** Reference to View for top-parent. For retrieval see {@link #getActivityView() getActivityView}. */
     private WeakReference<View> mActivityView;
-
-    /** Relative position of this view inside top-parent view. For calculation see {@link #getPositionInScreen() getPositionInScreen}. */
-    private PointF mPointRelativeToActivityView;
-
 
     public BlurLayout(Context context) {
         super(context, null);
@@ -64,31 +53,10 @@ public class BlurLayout extends FrameLayout {
         try {
             mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_downscaleFactor, 0.2f);
             mBlurRadius = a.getInteger(R.styleable.BlurLayout_blurRadius, 10);
-            mFPS = a.getInteger(R.styleable.BlurLayout_fps, 60);
         } finally {
             a.recycle();
         }
-
-        getViewTreeObserver().addOnGlobalLayoutListener(relativePointUpdater);
-        Choreographer.getInstance().postFrameCallback(invalidationLoop);
     }
-
-    /** Rebuilds the relative point of this view inside of all parent layouts. */
-    private ViewTreeObserver.OnGlobalLayoutListener relativePointUpdater = new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-            mPointRelativeToActivityView = getPositionInScreen();
-        }
-    };
-
-    /** Choreographer callback that re-draws the blur and schedules another callback. */
-    private Choreographer.FrameCallback invalidationLoop = new Choreographer.FrameCallback() {
-        @Override
-        public void doFrame(long frameTimeNanos) {
-            invalidate();
-            Choreographer.getInstance().postFrameCallbackDelayed(this, 1000 / mFPS);
-        }
-    };
 
     /**
      * {@inheritDoc}
@@ -116,11 +84,8 @@ public class BlurLayout extends FrameLayout {
             }
         }
 
-        // Check the relative point to the parent view.
-        // Don't continue if not available.
-        if (mPointRelativeToActivityView == null) {
-            return;
-        }
+        // Calculate the relative point to the parent view.
+        PointF pointRelativeToActivityView = getPositionInScreen();
 
         // Set alpha to 0 before creating the parent view bitmap.
         // The blur view shouldn't be visible in the created bitmap.
@@ -139,8 +104,8 @@ public class BlurLayout extends FrameLayout {
         int height = (int) (getHeight() * mDownscaleFactor);
 
         // The X/Y position of where to crop the bitmap.
-        int x = (int) (mPointRelativeToActivityView.x * mDownscaleFactor);
-        int y = (int) (mPointRelativeToActivityView.y * mDownscaleFactor);
+        int x = (int) (pointRelativeToActivityView.x * mDownscaleFactor);
+        int y = (int) (pointRelativeToActivityView.y * mDownscaleFactor);
 
         // Padding to add to crop pre-blur.
         // Blurring straight to edges has side-effects so padding is added.
@@ -197,20 +162,20 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
-     * See {@link #getPositionInScreen(View) getPositionInScreen} overload.
+     * Returns the position in screen. Left abstract to allow for specific implementations such as
+     * caching behavior.
      */
-    private PointF getPositionInScreen() {
-        return getPositionInScreen(this);
-    }
+    protected abstract PointF getPositionInScreen();
 
     /**
      * Finds the Point of the parent view, and offsets result by self getX() and getY().
      * @return PointF determining position of the passed in view inside all of its ViewParents.
      */
-    private PointF getPositionInScreen(View view) {
+    protected PointF getPositionInScreen(View view) {
         if (getParent() == null) {
             return new PointF();
         }
+
 
         ViewGroup parent;
         try {
@@ -262,14 +227,6 @@ public class BlurLayout extends FrameLayout {
     public void setBlurRadius(int blurRadius) {
         this.mBlurRadius = blurRadius;
         invalidate();
-    }
-
-    /**
-     * Sets FPS to invalidate blur with.
-     * See {@link #mFPS}.
-     */
-    public void setFPS(int fps) {
-        this.mFPS = fps;
     }
 
 }
