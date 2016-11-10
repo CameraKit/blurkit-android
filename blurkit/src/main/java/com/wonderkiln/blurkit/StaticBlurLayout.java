@@ -5,6 +5,13 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 
+/**
+ * A {@link BlurLayout} that only invalidates on layout changes - not continuously. This extension
+ * will provide better performance in cases where the background content is not moving.
+ *
+ * You can also use this extension if you want to handle when blurring happens yourself. Just call
+ * {@link #invalidate} if you want the blur to update.
+ */
 public class StaticBlurLayout extends BlurLayout {
 
     // Calculated class dependencies
@@ -25,6 +32,15 @@ public class StaticBlurLayout extends BlurLayout {
             invalidate();
         }
     };
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void invalidate() {
+        mPointRelativeToActivityView = getPositionInScreen(this);
+        super.invalidate();
+    }
 
     /**
      * {@inheritDoc}

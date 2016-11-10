@@ -7,6 +7,9 @@ import android.util.AttributeSet;
 import android.view.Choreographer;
 
 /**
+ * A {@link BlurLayout} that invalidates continuously synced with the UI thread. You can set the frames
+ * per second using the fps xml attribute or by using {@link #setFPS(int)}.
+ *
  * @attr ref R.styleable.BlurLayout_fps
  */
 public class DynamicBlurLayout extends BlurLayout {
