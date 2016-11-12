@@ -6,7 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.PointF;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.Choreographer;
@@ -103,7 +103,7 @@ public class BlurLayout extends FrameLayout {
         }
 
         // Calculate the relative point to the parent view.
-        PointF pointRelativeToActivityView = getPositionInScreen();
+        Point pointRelativeToActivityView = getPositionInScreen();
 
         // Set alpha to 0 before creating the parent view bitmap.
         // The blur view shouldn't be visible in the created bitmap.
@@ -183,17 +183,17 @@ public class BlurLayout extends FrameLayout {
      * Returns the position in screen. Left abstract to allow for specific implementations such as
      * caching behavior.
      */
-    private PointF getPositionInScreen() {
+    private Point getPositionInScreen() {
         return getPositionInScreen(this);
     }
 
     /**
      * Finds the Point of the parent view, and offsets result by self getX() and getY().
-     * @return PointF determining position of the passed in view inside all of its ViewParents.
+     * @return Point determining position of the passed in view inside all of its ViewParents.
      */
-    protected PointF getPositionInScreen(View view) {
+    protected Point getPositionInScreen(View view) {
         if (getParent() == null) {
-            return new PointF();
+            return new Point();
         }
 
 
@@ -201,15 +201,15 @@ public class BlurLayout extends FrameLayout {
         try {
             parent = (ViewGroup) view.getParent();
         } catch (Exception e) {
-            return new PointF();
+            return new Point();
         }
 
         if (parent == null) {
-            return new PointF();
+            return new Point();
         }
 
-        PointF point = getPositionInScreen(parent);
-        point.offset(view.getX(), view.getY());
+        Point point = getPositionInScreen(parent);
+        point.offset((int) view.getX(), (int) view.getY());
         return point;
     }
 
