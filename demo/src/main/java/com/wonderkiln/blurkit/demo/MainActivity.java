@@ -6,18 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
-import com.wonderkiln.blurkit.DynamicBlurLayout;
+import com.wonderkiln.blurkit.BlurKit;
+import com.wonderkiln.blurkit.BlurLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DynamicBlurLayout blurLayout;
+    private BlurLayout blurLayout;
     private float movement = 1.6f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BlurKit.init(this);
         setContentView(R.layout.activity_main);
-        blurLayout = (DynamicBlurLayout) findViewById(R.id.blurLayout);
+        blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
         imageView.animate().scaleX(movement).scaleY(movement).setDuration(1000).setListener(new AnimatorListenerAdapter() {

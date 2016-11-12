@@ -9,6 +9,8 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 24
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -20,5 +22,5 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'net.qiujuer.genius:blur:2.0.0'
+    compile files('src/main/jniLibs/renderscript-v8.jar')
 }

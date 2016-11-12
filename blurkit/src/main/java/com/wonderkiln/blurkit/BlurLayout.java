@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
-import net.qiujuer.genius.blur.StackBlur;
 
 import java.lang.ref.WeakReference;
 
@@ -22,8 +23,9 @@ import java.lang.ref.WeakReference;
  *
  * @attr ref R.styleable.BlurLayout_downscaleFactor
  * @attr ref R.styleable.BlurLayout_blurRadius
+ * @attr ref R.styleable.BlurLayout_fps
  */
-abstract class BlurLayout extends FrameLayout {
+public class BlurLayout extends FrameLayout {
 
     // Customizable attributes
 
@@ -32,6 +34,9 @@ abstract class BlurLayout extends FrameLayout {
 
     /** Blur radius passed directly to stackblur library. */
     private int mBlurRadius;
+
+    /** Number of blur invalidations to do per second.  */
+    private int mFPS;
 
     // Calculated class dependencies
 
@@ -53,10 +58,23 @@ abstract class BlurLayout extends FrameLayout {
         try {
             mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_downscaleFactor, 0.2f);
             mBlurRadius = a.getInteger(R.styleable.BlurLayout_blurRadius, 10);
+            mFPS = a.getInteger(R.styleable.BlurLayout_fps, 60);
         } finally {
             a.recycle();
         }
+
+        Choreographer.getInstance().postFrameCallback(invalidationLoop);
     }
+
+    /** Choreographer callback that re-draws the blur and schedules another callback. */
+    private Choreographer.FrameCallback invalidationLoop = new Choreographer.FrameCallback() {
+        @Override
+        public void doFrame(long frameTimeNanos) {
+            invalidate();
+            Choreographer.getInstance().postFrameCallbackDelayed(this, 1000 / mFPS);
+        }
+    };
+
 
     /**
      * {@inheritDoc}
@@ -128,7 +146,7 @@ abstract class BlurLayout extends FrameLayout {
         );
 
         // Blur the bitmap.
-        bitmap = StackBlur.blurNativelyPixels(bitmap, mBlurRadius, true);
+        bitmap = BlurKit.getInstance().blur(bitmap, mBlurRadius);
 
         // Crop the bitmap again to remove the padding.
         bitmap = Bitmap.createBitmap(
@@ -165,7 +183,9 @@ abstract class BlurLayout extends FrameLayout {
      * Returns the position in screen. Left abstract to allow for specific implementations such as
      * caching behavior.
      */
-    protected abstract PointF getPositionInScreen();
+    private PointF getPositionInScreen() {
+        return getPositionInScreen(this);
+    }
 
     /**
      * Finds the Point of the parent view, and offsets result by self getX() and getY().
@@ -200,14 +220,19 @@ abstract class BlurLayout extends FrameLayout {
      */
     private static Bitmap getDownscaledBitmapForView(View view, float downscaleFactor) throws NullPointerException {
         View screenView = view.getRootView();
-        screenView.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createScaledBitmap(
-                screenView.getDrawingCache(),
-                (int) (screenView.getWidth() * downscaleFactor),
-                (int) (screenView.getHeight() * downscaleFactor),
-                true
-        );
-        screenView.setDrawingCacheEnabled(false);
+        if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0) {
+            throw new NullPointerException();
+        }
+
+        int width = (int) (screenView.getWidth() * downscaleFactor);
+        int height = (int) (screenView.getHeight() * downscaleFactor);
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Matrix matrix = new Matrix();
+        matrix.preScale(downscaleFactor, downscaleFactor);
+        canvas.setMatrix(matrix);
+        screenView.draw(canvas);
         return bitmap;
     }
 
@@ -227,6 +252,14 @@ abstract class BlurLayout extends FrameLayout {
     public void setBlurRadius(int blurRadius) {
         this.mBlurRadius = blurRadius;
         invalidate();
+    }
+
+    /**
+     * Sets FPS to invalidate blur with.
+     * See {@link #mFPS}.
+     */
+    public void setFPS(int fps) {
+        this.mFPS = fps;
     }
 
 }
