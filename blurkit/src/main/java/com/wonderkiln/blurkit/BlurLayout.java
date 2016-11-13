@@ -28,8 +28,8 @@ import java.lang.ref.WeakReference;
  */
 public class BlurLayout extends FrameLayout {
 
-    public static final float DEFAULT_DOWNSCALE_FACTOR = 0.2f;
-    public static final int DEFAULT_BLUR_RADIUS = 16;
+    public static final float DEFAULT_DOWNSCALE_FACTOR = 0.12f;
+    public static final int DEFAULT_BLUR_RADIUS = 12;
     public static final int DEFAULT_FPS = 60;
 
     // Customizable attributes
@@ -130,14 +130,21 @@ public class BlurLayout extends FrameLayout {
 
         // Padding to add to crop pre-blur.
         // Blurring straight to edges has side-effects so padding is added.
-        int xPadding = (int) (width / 10 * (1/mDownscaleFactor));
-        int yPadding = (int) (height / 10 * (1/mDownscaleFactor));
+        int xPadding = getWidth() / 8;
+        int yPadding = getHeight() / 8;
 
         // Calculate padding independently for each side, checking edges.
-        int leftOffset = -xPadding; leftOffset = x + leftOffset >= 0 ? leftOffset : 0;
-        int rightOffset = xPadding; rightOffset = x + width + rightOffset <= screenWidth ? rightOffset : screenWidth - width - x;
-        int topOffset = -yPadding; topOffset = y + topOffset >= 0 ? topOffset : 0;
-        int bottomOffset = yPadding; bottomOffset = y + height + bottomOffset <= screenHeight ? bottomOffset : 0;
+        int leftOffset = -xPadding;
+        leftOffset = x + leftOffset >= 0 ? leftOffset : 0;
+
+        int rightOffset = xPadding;
+        rightOffset = x + getWidth() + rightOffset <= screenWidth ? rightOffset : screenWidth - getWidth() - x;
+
+        int topOffset = -yPadding;
+        topOffset = y + topOffset >= 0 ? topOffset : 0;
+
+        int bottomOffset = yPadding;
+        bottomOffset = y + height + bottomOffset <= screenHeight ? bottomOffset : 0;
 
         // Create parent view bitmap, cropped to the BlurLayout area with above padding.
         Bitmap bitmap;
