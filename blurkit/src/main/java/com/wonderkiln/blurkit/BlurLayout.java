@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.Choreographer;
@@ -26,6 +27,10 @@ import java.lang.ref.WeakReference;
  * @attr ref R.styleable.BlurLayout_fps
  */
 public class BlurLayout extends FrameLayout {
+
+    public static final float DEFAULT_DOWNSCALE_FACTOR = 0.2f;
+    public static final int DEFAULT_BLUR_RADIUS = 16;
+    public static final int DEFAULT_FPS = 60;
 
     // Customizable attributes
 
@@ -56,9 +61,9 @@ public class BlurLayout extends FrameLayout {
                 0, 0);
 
         try {
-            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_downscaleFactor, 0.2f);
-            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blurRadius, 10);
-            mFPS = a.getInteger(R.styleable.BlurLayout_fps, 60);
+            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
+            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blurRadius, DEFAULT_BLUR_RADIUS);
+            mFPS = a.getInteger(R.styleable.BlurLayout_fps, DEFAULT_FPS);
         } finally {
             a.recycle();
         }
@@ -75,22 +80,24 @@ public class BlurLayout extends FrameLayout {
         }
     };
 
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void invalidate() {
         super.invalidate();
-        blur();
+        Bitmap bitmap = blur();
+        if (bitmap != null) {
+            setBackground(new BitmapDrawable(bitmap));
+        }
     }
 
     /**
      * Recreates blur for content and sets it as the background.
      */
-    private void blur() {
+    private Bitmap blur() {
         if (getContext() == null) {
-            return;
+            return null;
         }
 
         // Check the reference to the parent view.
@@ -98,7 +105,7 @@ public class BlurLayout extends FrameLayout {
         if (mActivityView == null || mActivityView.get() == null) {
             mActivityView = new WeakReference<>(getActivityView());
             if (mActivityView.get() == null) {
-                return;
+                return null;
             }
         }
 
@@ -109,13 +116,9 @@ public class BlurLayout extends FrameLayout {
         // The blur view shouldn't be visible in the created bitmap.
         setAlpha(0);
 
-        // Create parent view bitmap.
-        Bitmap bitmap;
-        try {
-            bitmap = getDownscaledBitmapForView(mActivityView.get(), mDownscaleFactor);
-        } catch (NullPointerException e) {
-            return;
-        }
+        // Screen sizes for bound checks
+        int screenWidth = mActivityView.get().getWidth();
+        int screenHeight = mActivityView.get().getHeight();
 
         // The final dimensions of the blurred bitmap.
         int width = (int) (getWidth() * mDownscaleFactor);
@@ -127,41 +130,49 @@ public class BlurLayout extends FrameLayout {
 
         // Padding to add to crop pre-blur.
         // Blurring straight to edges has side-effects so padding is added.
-        int xPadding = width / 10;
-        int yPadding = height / 10;
+        int xPadding = (int) (width / 10 * (1/mDownscaleFactor));
+        int yPadding = (int) (height / 10 * (1/mDownscaleFactor));
 
         // Calculate padding independently for each side, checking edges.
         int leftOffset = -xPadding; leftOffset = x + leftOffset >= 0 ? leftOffset : 0;
-        int rightOffset = xPadding; rightOffset = x + width + rightOffset <= bitmap.getWidth() ? rightOffset : bitmap.getWidth() - width - x;
+        int rightOffset = xPadding; rightOffset = x + width + rightOffset <= screenWidth ? rightOffset : screenWidth - width - x;
         int topOffset = -yPadding; topOffset = y + topOffset >= 0 ? topOffset : 0;
-        int bottomOffset = yPadding; bottomOffset = y + height + bottomOffset <= bitmap.getHeight() ? bottomOffset : 0;
+        int bottomOffset = yPadding; bottomOffset = y + height + bottomOffset <= screenHeight ? bottomOffset : 0;
 
-        // Crop parent view bitmap with padding.
-        bitmap = Bitmap.createBitmap(
-                bitmap,
-                x + leftOffset,
-                y + topOffset,
-                width + Math.abs(leftOffset) + rightOffset,
-                height + Math.abs(topOffset) + bottomOffset
-        );
+        // Create parent view bitmap, cropped to the BlurLayout area with above padding.
+        Bitmap bitmap;
+        try {
+            bitmap = getDownscaledBitmapForView(
+                    mActivityView.get(),
+                    new Rect(
+                            pointRelativeToActivityView.x + leftOffset,
+                            pointRelativeToActivityView.y + topOffset,
+                            pointRelativeToActivityView.x + getWidth() + Math.abs(leftOffset) + rightOffset,
+                            pointRelativeToActivityView.y + getHeight() + Math.abs(topOffset) + bottomOffset
+                    ),
+                    mDownscaleFactor
+            );
+        } catch (NullPointerException e) {
+            return null;
+        }
 
         // Blur the bitmap.
         bitmap = BlurKit.getInstance().blur(bitmap, mBlurRadius);
 
-        // Crop the bitmap again to remove the padding.
+        //Crop the bitmap again to remove the padding.
         bitmap = Bitmap.createBitmap(
                 bitmap,
-                Math.abs(leftOffset),
-                Math.abs(topOffset),
+                (int) (Math.abs(leftOffset) * mDownscaleFactor),
+                (int) (Math.abs(topOffset) * mDownscaleFactor),
                 width,
                 height
         );
 
-        // Set background as blurred bitmap.
-        setBackground(new BitmapDrawable(getResources(), bitmap));
-
         // Make self visible again.
         setAlpha(1);
+
+        // Set background as blurred bitmap.
+        return bitmap;
     }
 
     /**
@@ -191,7 +202,7 @@ public class BlurLayout extends FrameLayout {
      * Finds the Point of the parent view, and offsets result by self getX() and getY().
      * @return Point determining position of the passed in view inside all of its ViewParents.
      */
-    protected Point getPositionInScreen(View view) {
+    private Point getPositionInScreen(View view) {
         if (getParent() == null) {
             return new Point();
         }
@@ -215,24 +226,31 @@ public class BlurLayout extends FrameLayout {
 
     /**
      * Users a View reference to create a bitmap, and downscales it using the passed in factor.
+     * Uses a Rect to crop the view into the bitmap.
      * @return Bitmap made from view, downscaled by downscaleFactor.
      * @throws NullPointerException
      */
-    private static Bitmap getDownscaledBitmapForView(View view, float downscaleFactor) throws NullPointerException {
+    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws NullPointerException {
         View screenView = view.getRootView();
-        if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0) {
+
+        int width = (int) (crop.width() * downscaleFactor);
+        int height = (int) (crop.height() * downscaleFactor);
+
+        if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0 || width <= 0 || height <= 0) {
             throw new NullPointerException();
         }
 
-        int width = (int) (screenView.getWidth() * downscaleFactor);
-        int height = (int) (screenView.getHeight() * downscaleFactor);
+        float dx = -crop.left * downscaleFactor;
+        float dy = -crop.top * downscaleFactor;
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(bitmap);
         Matrix matrix = new Matrix();
         matrix.preScale(downscaleFactor, downscaleFactor);
+        matrix.postTranslate(dx, dy);
         canvas.setMatrix(matrix);
         screenView.draw(canvas);
+
         return bitmap;
     }
 

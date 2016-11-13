@@ -10,13 +10,13 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/cat"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/cat" />
 
     <com.wonderkiln.blurkit.BlurLayout
         android:id="@+id/blurLayout"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

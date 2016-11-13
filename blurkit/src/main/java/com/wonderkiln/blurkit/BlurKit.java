@@ -22,10 +22,6 @@ public class BlurKit {
         instance.rs = RenderScript.create(context);
     }
 
-    public Bitmap blur(Bitmap src) {
-        return blur(src, 10);
-    }
-
     public Bitmap blur(Bitmap src, int radius) {
         final Allocation input = Allocation.createFromBitmap(rs, src);
         final Allocation output = Allocation.createTyped(rs, input.getType());
