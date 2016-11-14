@@ -20,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
         blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.animate().scaleX(movement).scaleY(movement).setDuration(1000).setListener(new AnimatorListenerAdapter() {
+        imageView.animate().scaleX(movement).scaleY(movement).setDuration(1500).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 movement = movement > 1.2f ? 1.2f : 1.6f;
-                imageView.animate().scaleX(movement).scaleY(movement).setDuration(1000).setListener(this).start();
+                imageView.animate().scaleX(movement).scaleY(movement).setDuration(1500).setListener(this).start();
             }
         }).start();
     }
