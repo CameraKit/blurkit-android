@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
-import com.wonderkiln.blurkit.BlurKit;
 import com.wonderkiln.blurkit.BlurLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BlurKit.init(this);
         setContentView(R.layout.activity_main);
         blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
 

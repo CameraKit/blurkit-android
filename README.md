@@ -11,6 +11,7 @@ compile 'com.wonderkiln:blurkit:1.0.0'
 ```
 
 ## Usage
+### BlurLayout
 Add a `BlurLayout` to your layout just like any other view.
 
 ```xml
@@ -49,6 +50,34 @@ Other attributes you can configure are the blur radius and the downscale factor.
     blurkit:blurRadius="12"
     blurkit:downscaleFactor="0.12"
     blurkit:fps="60" />
+```
+
+### Other
+You can use the `BlurKit` class which has a few useful blurring utilities. Before using this class outside of a `BlurLayout`, you need to initialize `BlurKit.
+
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        BlurKit.init(this);
+    }
+}
+```
+
+You can blur a `View`, or a `Bitmap` directly.
+
+```java
+// View
+BlurKit.blur(View src, int radius);
+
+// Bitmap
+BlurKit.blur(Bitmap src, int radius);
+```
+
+You can also __fastBlur__ a `View`. This optimizes the view blurring process by allocating a downsized bitmap and using a `Matrix` with the bitmaps `Canvas` to prescale the drawing of the view to the bitmap.
+
+```java
+BlurKit.fastBlur(View src, int radius, float downscaleFactor);
 ```
 
 ## To Do (incoming!)

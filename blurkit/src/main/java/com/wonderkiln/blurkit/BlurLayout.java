@@ -54,6 +54,7 @@ public class BlurLayout extends FrameLayout {
 
     public BlurLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        BlurKit.init(context);
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
