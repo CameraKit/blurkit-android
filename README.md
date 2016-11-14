@@ -4,10 +4,17 @@ BlurKit is an extraordinarily easy to use utility to get live blurring just like
 
 ![BlurKit Demo](.repo/demo.gif)
 
-## Download
-Gradle:
+## Setup
+Add __BlurKit__ to your dependencies block:
 ```groovy
 compile 'com.wonderkiln:blurkit:1.0.0'
+```
+
+You also need to add __RenderScript__ to your app module. Add these lines to the `defaultConfig` block of your __build.gradle__.
+
+```groovy
+renderscriptTargetApi 24
+renderscriptSupportModeEnabled true
 ```
 
 ## Usage
