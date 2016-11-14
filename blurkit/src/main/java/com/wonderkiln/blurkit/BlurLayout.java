@@ -68,7 +68,9 @@ public class BlurLayout extends FrameLayout {
             a.recycle();
         }
 
-        Choreographer.getInstance().postFrameCallback(invalidationLoop);
+        if (mFPS > 0) {
+            Choreographer.getInstance().postFrameCallback(invalidationLoop);
+        }
     }
 
     /** Choreographer callback that re-draws the blur and schedules another callback. */

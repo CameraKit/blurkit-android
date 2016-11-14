@@ -2,10 +2,13 @@ package com.wonderkiln.blurkit;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
+import android.view.View;
 
 public class BlurKit {
 
@@ -31,6 +34,32 @@ public class BlurKit {
         script.forEach(output);
         output.copyTo(src);
         return src;
+    }
+
+    public Bitmap blur(View src, int radius) {
+        Bitmap bitmap = getBitmapForView(src, 1f);
+        return blur(bitmap, radius);
+    }
+
+    public Bitmap fastBlur(View src, int radius, float downscaleFactor) {
+        Bitmap bitmap = getBitmapForView(src, downscaleFactor);
+        return blur(bitmap, radius);
+    }
+
+    private Bitmap getBitmapForView(View src, float downscaleFactor) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                (int) (src.getWidth() * downscaleFactor),
+                (int) (src.getHeight() * downscaleFactor),
+                Bitmap.Config.ARGB_4444
+        );
+
+        Canvas canvas = new Canvas(bitmap);
+        Matrix matrix = new Matrix();
+        matrix.preScale(downscaleFactor, downscaleFactor);
+        canvas.setMatrix(matrix);
+        src.draw(canvas);
+
+        return bitmap;
     }
 
     public static BlurKit getInstance() {
