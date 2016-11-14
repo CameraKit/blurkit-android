@@ -2,7 +2,7 @@
 
 BlurKit is an extraordinarily easy to use utility to get live blurring just like on iOS. Built by [Dylan McIntyre](https://github.com/dwillmc).
 
-Proper overview coming soon.
+![BlurKit Demo](.repo/demo.gif)
 
 ## Download
 Gradle:
