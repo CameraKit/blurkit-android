@@ -53,7 +53,7 @@ Other attributes you can configure are the blur radius and the downscale factor.
 ```
 
 ### Other
-You can use the `BlurKit` class which has a few useful blurring utilities. Before using this class outside of a `BlurLayout`, you need to initialize `BlurKit.
+You can use the `BlurKit` class which has a few useful blurring utilities. Before using this class outside of a `BlurLayout`, you need to initialize `BlurKit`.
 
 ```java
 public class MyApplication extends Application {

@@ -21,10 +21,6 @@ import java.lang.ref.WeakReference;
  * A {@link ViewGroup} that blurs all content behind it. Automatically creates bitmap of parent content
  * and finds its relative position to the top parent to draw properly regardless of where the layout is
  * placed.
- *
- * @attr ref R.styleable.BlurLayout_downscaleFactor
- * @attr ref R.styleable.BlurLayout_blurRadius
- * @attr ref R.styleable.BlurLayout_fps
  */
 public class BlurLayout extends FrameLayout {
 
