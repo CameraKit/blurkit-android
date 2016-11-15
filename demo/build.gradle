@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.wonderkiln.blurkit.demo"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi 24
+        renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
     }
     buildTypes {
@@ -22,6 +22,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile project(':blurkit')
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.wonderkiln:blurkit:1.0.0'
 }
