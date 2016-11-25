@@ -4,6 +4,17 @@ BlurKit is an extraordinarily easy to use utility to get live blurring just like
 
 ![BlurKit Demo](.repo/demo.gif)
 
+## Perfomance
+
+BlurKit is faster than other blurring libraries due to a number of bitmap retrieval and drawing optimizations. We've been logging benchmarks for the basic high-intensity tasks for a 300dp x 100dp BlurView:
+
+| Task                      | BlurKit time       | Avg. time without BlurKit |
+| --------------------------| -------------------| -----------------------   |
+| Retrieve source bitmap    | 1-2 ms             | 8-25 ms                   |
+| Blur and draw to BlurView | 1-2 ms             | 10-50ms                   |
+
+This results in an average work/frame time of 2-4ms, which will be a seamless experience for most users and apps.
+
 ## Setup
 Add __BlurKit__ to your dependencies block:
 ```groovy
