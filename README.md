@@ -107,3 +107,4 @@ BlurKit.fastBlur(View src, int radius, float downscaleFactor);
 Dylan McIntyre
 
 ## License
+BlurKit-Android is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
