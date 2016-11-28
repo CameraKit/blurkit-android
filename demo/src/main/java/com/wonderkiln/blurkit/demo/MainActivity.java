@@ -30,4 +30,15 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        blurLayout.startBlur();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        blurLayout.pauseBlur();
+    }
 }
