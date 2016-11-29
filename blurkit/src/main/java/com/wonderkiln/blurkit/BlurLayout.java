@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
@@ -284,32 +285,32 @@ public class BlurLayout extends FrameLayout {
      * caching behavior.
      */
     private Point getPositionInScreen() {
-        return getPositionInScreen(this);
+        PointF pointF = getPositionInScreen(this);
+        return new Point((int) pointF.x, (int) pointF.y);
     }
 
     /**
      * Finds the Point of the parent view, and offsets result by self getX() and getY().
      * @return Point determining position of the passed in view inside all of its ViewParents.
      */
-    private Point getPositionInScreen(View view) {
+    private PointF getPositionInScreen(View view) {
         if (getParent() == null) {
-            return new Point();
+            return new PointF();
         }
-
 
         ViewGroup parent;
         try {
             parent = (ViewGroup) view.getParent();
         } catch (Exception e) {
-            return new Point();
+            return new PointF();
         }
 
         if (parent == null) {
-            return new Point();
+            return new PointF();
         }
 
-        Point point = getPositionInScreen(parent);
-        point.offset((int) view.getX(), (int) view.getY());
+        PointF point = getPositionInScreen(parent);
+        point.offset(view.getX(), view.getY());
         return point;
     }
 
@@ -394,7 +395,9 @@ public class BlurLayout extends FrameLayout {
         if (mActivityView != null && mActivityView.get() != null) {
             View view = mActivityView.get().getRootView();
             try {
+                setAlpha(0f);
                 mLockedBitmap = getDownscaledBitmapForView(view, new Rect(0, 0, view.getWidth(), view.getHeight()), mDownscaleFactor);
+                setAlpha(1f);
                 mLockedBitmap = BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
             } catch (Exception e) {
                 // ignore
