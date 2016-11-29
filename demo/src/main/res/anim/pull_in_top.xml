@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016 Semireg Industries, LLC.  All rights reserved.
+  -->
+
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="300"
+    android:fromYDelta="100%"
+    android:toYDelta="0%"
+    android:interpolator="@android:anim/decelerate_interpolator"
+     />
