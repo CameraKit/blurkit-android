@@ -44,7 +44,7 @@ The layout background will continuously blur the content behind it. If you know 
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
-    blurkit:fps="0" />
+    blurkit:blk_fps="0" />
 ```
 
 Other attributes you can configure are the blur radius and the downscale factor. Getting these to work together well can take some experimentation. The downscale factor is a performance optimization; the bitmap for the background content will be downsized by this factor before being drawn and blurred.
@@ -54,9 +54,9 @@ Other attributes you can configure are the blur radius and the downscale factor.
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
-    blurkit:blurRadius="12"
-    blurkit:downscaleFactor="0.12"
-    blurkit:fps="60" />
+    blurkit:blk_blurRadius="12"
+    blurkit:blk_downscaleFactor="0.12"
+    blurkit:blk_fps="60" />
 ```
 
 ### Other

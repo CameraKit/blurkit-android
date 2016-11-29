@@ -58,9 +58,9 @@ public class BlurLayout extends FrameLayout {
                 0, 0);
 
         try {
-            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
-            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blurRadius, DEFAULT_BLUR_RADIUS);
-            mFPS = a.getInteger(R.styleable.BlurLayout_fps, DEFAULT_FPS);
+            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_blk_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
+            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
+            mFPS = a.getInteger(R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
         } finally {
             a.recycle();
         }

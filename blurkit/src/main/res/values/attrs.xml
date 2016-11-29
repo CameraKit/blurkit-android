@@ -2,9 +2,9 @@
 <resources>
 
     <declare-styleable name="BlurLayout">
-        <attr name="downscaleFactor" format="float" />
-        <attr name="blurRadius" format="integer" />
-        <attr name="fps" format="integer" />
+        <attr name="blk_downscaleFactor" format="float" />
+        <attr name="blk_blurRadius" format="integer" />
+        <attr name="blk_fps" format="integer" />
     </declare-styleable>
 
 </resources>
