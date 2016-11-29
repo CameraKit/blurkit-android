@@ -17,7 +17,8 @@
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        blurkit:blk_downscaleFactor="0.25">
 
         <TextView
             android:layout_width="wrap_content"
