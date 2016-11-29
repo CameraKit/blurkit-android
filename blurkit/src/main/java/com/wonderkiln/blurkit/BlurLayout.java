@@ -39,7 +39,7 @@ public class BlurLayout extends FrameLayout {
     /** Number of blur invalidations to do per second.  */
     private int mFPS;
 
-    /** is blur running ? */
+    /** Is blur running? */
     private boolean mRunning;
 
     // Calculated class dependencies
@@ -78,7 +78,7 @@ public class BlurLayout extends FrameLayout {
         }
     };
 
-    /** start blur layout **/
+    /** Start BlurLayout continuous invalidation. **/
     public void startBlur() {
         if (mRunning) {
             return;
@@ -89,11 +89,13 @@ public class BlurLayout extends FrameLayout {
         }
     }
 
-    /** pause blur layout **/
+    /** PauseBlurLayout continuous invalidation. **/
     public void pauseBlur() {
         if (!mRunning) {
             return;
         }
+
+        mRunning = false;
         Choreographer.getInstance().removeFrameCallback(invalidationLoop);
     }
 
