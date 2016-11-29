@@ -14,15 +14,19 @@ public class BlurKit {
 
     private static BlurKit instance;
 
-    private RenderScript rs;
+    final private RenderScript rs;
 
     public static void init(Context context) {
         if (instance != null) {
             return;
         }
 
-        instance = new BlurKit();
-        instance.rs = RenderScript.create(context);
+        // don't leak activity context into a static variable
+        instance = new BlurKit(context.getApplicationContext());
+    }
+
+    private BlurKit(Context context) {
+        rs = RenderScript.create(context);
     }
 
     public Bitmap blur(Bitmap src, int radius) {
