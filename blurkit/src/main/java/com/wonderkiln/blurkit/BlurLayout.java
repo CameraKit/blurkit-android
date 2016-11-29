@@ -56,7 +56,10 @@ public class BlurLayout extends FrameLayout {
 
     public BlurLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        BlurKit.init(context);
+
+        if(!isInEditMode()) {
+            BlurKit.init(context);
+        }
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -132,7 +135,7 @@ public class BlurLayout extends FrameLayout {
      * Recreates blur for content and sets it as the background.
      */
     private Bitmap blur() {
-        if (getContext() == null) {
+        if (getContext() == null || isInEditMode()) {
             return null;
         }
 
