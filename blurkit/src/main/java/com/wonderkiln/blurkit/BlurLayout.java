@@ -158,6 +158,8 @@ public class BlurLayout extends FrameLayout {
                     ),
                     mDownscaleFactor
             );
+        } catch (BlurKitException e) {
+            return null;
         } catch (NullPointerException e) {
             return null;
         }
@@ -236,14 +238,14 @@ public class BlurLayout extends FrameLayout {
      * @return Bitmap made from view, downscaled by downscaleFactor.
      * @throws NullPointerException
      */
-    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws NullPointerException {
+    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws BlurKitException, NullPointerException {
         View screenView = view.getRootView();
 
         int width = (int) (crop.width() * downscaleFactor);
         int height = (int) (crop.height() * downscaleFactor);
 
         if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0 || width <= 0 || height <= 0) {
-            throw new NullPointerException();
+            throw new BlurKitException("No screen available (width or height = 0)");
         }
 
         float dx = -crop.left * downscaleFactor;
