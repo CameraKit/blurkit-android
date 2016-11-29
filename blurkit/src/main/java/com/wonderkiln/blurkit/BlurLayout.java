@@ -9,12 +9,12 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
@@ -54,6 +54,9 @@ public class BlurLayout extends FrameLayout {
 
     // Calculated class dependencies
 
+    /** ImageView to show the blurred content. */
+    private ImageView mImageView;
+
     /** Reference to View for top-parent. For retrieval see {@link #getActivityView() getActivityView}. */
     private WeakReference<View> mActivityView;
 
@@ -83,6 +86,10 @@ public class BlurLayout extends FrameLayout {
         } finally {
             a.recycle();
         }
+
+        mImageView = new ImageView(getContext());
+        mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        addView(mImageView);
     }
 
     /** Choreographer callback that re-draws the blur and schedules another callback. */
@@ -106,7 +113,7 @@ public class BlurLayout extends FrameLayout {
         }
     }
 
-    /** PauseBlurLayout continuous invalidation. **/
+    /** Pause BlurLayout continuous invalidation. **/
     public void pauseBlur() {
         if (!mRunning) {
             return;
@@ -138,7 +145,7 @@ public class BlurLayout extends FrameLayout {
         super.invalidate();
         Bitmap bitmap = blur();
         if (bitmap != null) {
-            setBackground(new BitmapDrawable(bitmap));
+            mImageView.setImageBitmap(bitmap);
         }
     }
 
