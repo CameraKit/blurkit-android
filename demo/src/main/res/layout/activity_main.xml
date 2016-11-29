@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/peppers" />
-
+<!--
     <com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
@@ -27,6 +27,7 @@
             android:textColor="@android:color/white" />
 
     </com.wonderkiln.blurkit.BlurLayout>
+ -->
 
     <Button
         android:text="Show Fragment"
