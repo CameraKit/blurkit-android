@@ -42,6 +42,9 @@ public class BlurLayout extends FrameLayout {
     /** Is blur running? */
     private boolean mRunning;
 
+    /** Is window attached? */
+    private boolean isAttachedToWindow;
+
     // Calculated class dependencies
 
     /** Reference to View for top-parent. For retrieval see {@link #getActivityView() getActivityView}. */
@@ -102,12 +105,14 @@ public class BlurLayout extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        isAttachedToWindow = true;
         startBlur();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        isAttachedToWindow = false;
         pauseBlur();
     }
 
@@ -317,7 +322,15 @@ public class BlurLayout extends FrameLayout {
      * See {@link #mFPS}.
      */
     public void setFPS(int fps) {
+        if (mRunning) {
+            pauseBlur();
+        }
+
         this.mFPS = fps;
+
+        if (isAttachedToWindow) {
+            startBlur();
+        }
     }
 
 }
