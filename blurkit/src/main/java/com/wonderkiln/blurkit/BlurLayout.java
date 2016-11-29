@@ -39,6 +39,9 @@ public class BlurLayout extends FrameLayout {
     /** Number of blur invalidations to do per second.  */
     private int mFPS;
 
+    /** is blur running ? */
+    private boolean mRunning;
+
     // Calculated class dependencies
 
     /** Reference to View for top-parent. For retrieval see {@link #getActivityView() getActivityView}. */
@@ -64,10 +67,6 @@ public class BlurLayout extends FrameLayout {
         } finally {
             a.recycle();
         }
-
-        if (mFPS > 0) {
-            Choreographer.getInstance().postFrameCallback(invalidationLoop);
-        }
     }
 
     /** Choreographer callback that re-draws the blur and schedules another callback. */
@@ -78,6 +77,37 @@ public class BlurLayout extends FrameLayout {
             Choreographer.getInstance().postFrameCallbackDelayed(this, 1000 / mFPS);
         }
     };
+
+    /** start blur layout **/
+    public void startBlur() {
+        if (mRunning) {
+            return;
+        }
+        if (mFPS > 0) {
+            mRunning = true;
+            Choreographer.getInstance().postFrameCallback(invalidationLoop);
+        }
+    }
+
+    /** pause blur layout **/
+    public void pauseBlur() {
+        if (!mRunning) {
+            return;
+        }
+        Choreographer.getInstance().removeFrameCallback(invalidationLoop);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        startBlur();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        pauseBlur();
+    }
 
     /**
      * {@inheritDoc}
