@@ -57,7 +57,7 @@ public class BlurLayout extends FrameLayout {
     public BlurLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        if(!isInEditMode()) {
+        if (!isInEditMode()) {
             BlurKit.init(context);
         }
 
