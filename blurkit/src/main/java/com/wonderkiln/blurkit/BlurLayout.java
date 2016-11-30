@@ -140,9 +140,12 @@ public class BlurLayout extends FrameLayout {
         pauseBlur();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        invalidate();
+    }
+
     @Override
     public void invalidate() {
         super.invalidate();
