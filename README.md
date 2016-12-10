@@ -86,16 +86,16 @@ You can blur a `View`, or a `Bitmap` directly.
 
 ```java
 // View
-BlurKit.blur(View src, int radius);
+BlurKit.getInstance().blur(View src, int radius);
 
 // Bitmap
-BlurKit.blur(Bitmap src, int radius);
+BlurKit.getInstance().blur(Bitmap src, int radius);
 ```
 
 You can also __fastBlur__ a `View`. This optimizes the view blurring process by allocating a downsized bitmap and using a `Matrix` with the bitmaps `Canvas` to prescale the drawing of the view to the bitmap.
 
 ```java
-BlurKit.fastBlur(View src, int radius, float downscaleFactor);
+BlurKit.getInstance().fastBlur(View src, int radius, float downscaleFactor);
 ```
 
 ## To Do (incoming!)
