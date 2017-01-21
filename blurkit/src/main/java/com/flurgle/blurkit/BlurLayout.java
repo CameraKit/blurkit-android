@@ -28,6 +28,7 @@ public class BlurLayout extends FrameLayout {
     public static final float DEFAULT_DOWNSCALE_FACTOR = 0.12f;
     public static final int DEFAULT_BLUR_RADIUS = 12;
     public static final int DEFAULT_FPS = 60;
+    public static final float DEFAULT_CORNER_RADIUS = 0.f;
 
     // Customizable attributes
 
@@ -39,6 +40,9 @@ public class BlurLayout extends FrameLayout {
 
     /** Number of blur invalidations to do per second.  */
     private int mFPS;
+
+    /** Corner radius for the layouts blur. To make rounded rects and circles. */
+    private float mCornerRadius;
 
     /** Is blur running? */
     private boolean mRunning;
@@ -55,7 +59,7 @@ public class BlurLayout extends FrameLayout {
     // Calculated class dependencies
 
     /** ImageView to show the blurred content. */
-    private ImageView mImageView;
+    private RoundedImageView mImageView;
 
     /** Reference to View for top-parent. For retrieval see {@link #getActivityView() getActivityView}. */
     private WeakReference<View> mActivityView;
@@ -83,16 +87,19 @@ public class BlurLayout extends FrameLayout {
                 0, 0);
 
         try {
-            mDownscaleFactor = a.getFloat(com.flurgle.blurkit.R.styleable.BlurLayout_blk_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
-            mBlurRadius = a.getInteger(com.flurgle.blurkit.R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
-            mFPS = a.getInteger(com.flurgle.blurkit.R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
+            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_blk_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
+            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
+            mFPS = a.getInteger(R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
+            mCornerRadius = a.getDimension(R.styleable.BlurLayout_blk_cornerRadius, DEFAULT_CORNER_RADIUS);
         } finally {
             a.recycle();
         }
 
-        mImageView = new ImageView(getContext());
+        mImageView = new RoundedImageView(getContext());
         mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         addView(mImageView);
+
+        setCornerRadius(mCornerRadius);
     }
 
     /** Choreographer callback that re-draws the blur and schedules another callback. */
@@ -397,6 +404,14 @@ public class BlurLayout extends FrameLayout {
         if (mAttachedToWindow) {
             startBlur();
         }
+    }
+
+    public void setCornerRadius(float cornerRadius) {
+        this.mCornerRadius = cornerRadius;
+        if (mImageView != null) {
+            mImageView.setCornerRadius(cornerRadius);
+        }
+        invalidate();
     }
 
     /**

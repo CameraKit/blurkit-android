@@ -15,9 +15,10 @@
 
     <com.flurgle.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
         android:id="@+id/blurLayout"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
+        blurkit:blk_cornerRadius="150dp"
         blurkit:blk_downscaleFactor="0.25">
 
         <TextView

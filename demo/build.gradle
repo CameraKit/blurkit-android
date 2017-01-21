@@ -21,8 +21,12 @@ android {
     }
 }
 
+repositories {
+    maven { url 'https://dl.bintray.com/flurgle/maven' }
+}
+
 dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
-//    compile 'com.flurgle:blurkit:1.0.0'
+    //compile 'com.flurgle:blurkit:1.1.0'
     compile project(':blurkit')
 }
