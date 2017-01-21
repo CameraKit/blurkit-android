@@ -1,4 +1,4 @@
-package com.wonderkiln.blurkit;
+package com.flurgle.blurkit;
 
 import android.app.Activity;
 import android.content.Context;
@@ -74,18 +74,18 @@ public class BlurLayout extends FrameLayout {
         super(context, attrs);
 
         if (!isInEditMode()) {
-            BlurKit.init(context);
+            com.flurgle.blurkit.BlurKit.init(context);
         }
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                R.styleable.BlurLayout,
+                com.flurgle.blurkit.R.styleable.BlurLayout,
                 0, 0);
 
         try {
-            mDownscaleFactor = a.getFloat(R.styleable.BlurLayout_blk_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
-            mBlurRadius = a.getInteger(R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
-            mFPS = a.getInteger(R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
+            mDownscaleFactor = a.getFloat(com.flurgle.blurkit.R.styleable.BlurLayout_blk_downscaleFactor, DEFAULT_DOWNSCALE_FACTOR);
+            mBlurRadius = a.getInteger(com.flurgle.blurkit.R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
+            mFPS = a.getInteger(com.flurgle.blurkit.R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
         } finally {
             a.recycle();
         }
@@ -248,7 +248,7 @@ public class BlurLayout extends FrameLayout {
                         ),
                         mDownscaleFactor
                 );
-            } catch (BlurKitException e) {
+            } catch (com.flurgle.blurkit.BlurKitException e) {
                 return null;
             } catch (NullPointerException e) {
                 return null;
@@ -258,7 +258,7 @@ public class BlurLayout extends FrameLayout {
 
         if (!mViewLocked) {
             // Blur the bitmap.
-            bitmap = BlurKit.getInstance().blur(bitmap, mBlurRadius);
+            bitmap = com.flurgle.blurkit.BlurKit.getInstance().blur(bitmap, mBlurRadius);
 
             //Crop the bitmap again to remove the padding.
             bitmap = Bitmap.createBitmap(
@@ -333,14 +333,14 @@ public class BlurLayout extends FrameLayout {
      * @return Bitmap made from view, downscaled by downscaleFactor.
      * @throws NullPointerException
      */
-    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws BlurKitException, NullPointerException {
+    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws com.flurgle.blurkit.BlurKitException, NullPointerException {
         View screenView = view.getRootView();
 
         int width = (int) (crop.width() * downscaleFactor);
         int height = (int) (crop.height() * downscaleFactor);
 
         if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0 || width <= 0 || height <= 0) {
-            throw new BlurKitException("No screen available (width or height = 0)");
+            throw new com.flurgle.blurkit.BlurKitException("No screen available (width or height = 0)");
         }
 
         float dx = -crop.left * downscaleFactor;
@@ -411,7 +411,7 @@ public class BlurLayout extends FrameLayout {
                 setAlpha(0f);
                 mLockedBitmap = getDownscaledBitmapForView(view, new Rect(0, 0, view.getWidth(), view.getHeight()), mDownscaleFactor);
                 setAlpha(1f);
-                mLockedBitmap = BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
+                mLockedBitmap = com.flurgle.blurkit.BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
             } catch (Exception e) {
                 // ignore
             }

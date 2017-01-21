@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wonderkiln.blurkit.demo.MainActivity">
+    tools:context="com.flurgle.blurkit.demo.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/peppers" />
 
-    <com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+    <com.flurgle.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -27,6 +27,6 @@
             android:text="BlurKit!"
             android:textColor="@android:color/white" />
 
-    </com.wonderkiln.blurkit.BlurLayout>
+    </com.flurgle.blurkit.BlurLayout>
 
 </RelativeLayout>

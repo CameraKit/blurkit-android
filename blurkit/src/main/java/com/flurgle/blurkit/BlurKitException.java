@@ -1,4 +1,4 @@
-package com.wonderkiln.blurkit;
+package com.flurgle.blurkit;
 
 public class BlurKitException extends Exception {
 
