@@ -98,6 +98,19 @@ You can also __fastBlur__ a `View`. This optimizes the view blurring process by 
 BlurKit.getInstance().fastBlur(View src, int radius, float downscaleFactor);
 ```
 
+## Proguard
+If you use Proguard, add the following to your proguard-rules.pro:
+
+```
+-keep class com.wonderkiln.blurkit.** { *; }
+
+-dontwarn android.support.v8.renderscript.*
+-keepclassmembers class android.support.v8.renderscript.RenderScript {
+  native *** rsn*(...);
+  native *** n*(...);
+}
+```
+
 ## To Do (incoming!)
 - [ ] `SurfaceView` support
 - [ ] Support for use outside of an `Activity` (dialogs, etc.)
