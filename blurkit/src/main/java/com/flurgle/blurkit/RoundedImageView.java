@@ -16,29 +16,29 @@ import android.widget.ImageView;
 public class RoundedImageView extends ImageView {
 
     private float mCornerRadius = 0;
+    private RectF rectF;
+    private PorterDuffXfermode porterDuff;
 
     public RoundedImageView(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public RoundedImageView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        rectF = new RectF();
+        porterDuff = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         Drawable myDrawable = getDrawable();
-        if (myDrawable!=null && myDrawable instanceof BitmapDrawable && mCornerRadius > 0) {
+        if (myDrawable != null && myDrawable instanceof BitmapDrawable && mCornerRadius > 0) {
             Paint paint = ((BitmapDrawable) myDrawable).getPaint();
             final int color = 0xff000000;
             Rect bitmapBounds = myDrawable.getBounds();
-            final RectF rectF = new RectF(bitmapBounds);
+            rectF.set(bitmapBounds);
             int saveCount = canvas.saveLayer(rectF, null,
-                    Canvas.MATRIX_SAVE_FLAG |
-                            Canvas.CLIP_SAVE_FLAG |
-                            Canvas.HAS_ALPHA_LAYER_SAVE_FLAG |
-                            Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
-                            Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+                    Canvas.ALL_SAVE_FLAG);
             getImageMatrix().mapRect(rectF);
 
             paint.setAntiAlias(true);
@@ -47,7 +47,7 @@ public class RoundedImageView extends ImageView {
             canvas.drawRoundRect(rectF, mCornerRadius, mCornerRadius, paint);
 
             Xfermode oldMode = paint.getXfermode();
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            paint.setXfermode(porterDuff);
             super.onDraw(canvas);
             paint.setXfermode(oldMode);
             canvas.restoreToCount(saveCount);
