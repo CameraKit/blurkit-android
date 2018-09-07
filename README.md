@@ -1,6 +1,9 @@
-![BlurKit Header](.repo/blurkit-android-header.png)
+![BlurKit Header](.repo/BlurKit-Brand-Half.png)
 
-BlurKit is an extraordinarily easy to use utility to get live blurring just like on iOS. Built by [Dylan McIntyre](https://github.com/dwillmc).
+## What Is BlurKit?
+BlurKit is an extraordinarily easy to use and performant utility to render real time blur effects in Android.
+
+
 
 ![BlurKit Demo](.repo/demo.gif)
 
@@ -70,7 +73,7 @@ Other attributes you can configure are the blur radius and the downscale factor.
     blurkit:blk_fps="60" />
 ```
 
-### Other
+### Creating BlurKit Outside Of A Layout
 You can use the `BlurKit` class which has a few useful blurring utilities. Before using this class outside of a `BlurLayout`, you need to initialize `BlurKit`.
 
 ```java
@@ -111,13 +114,13 @@ If you use Proguard, add the following to your proguard-rules.pro:
 }
 ```
 
-## To Do (incoming!)
+## Upcoming Features
 - [ ] `SurfaceView` support
 - [ ] Support for use outside of an `Activity` (dialogs, etc.)
 - [ ] Enhance retrieval of background content to only include views drawn behind the `BlurLayout`.
 
 ## Credits
-Dylan McIntyre
+Built by [Dylan McIntyre](https://github.com/dwillmc).
 
 ## License
 BlurKit-Android is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
