@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Xfermode;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,13 +15,21 @@ import android.widget.ImageView;
 public class RoundedImageView extends ImageView {
 
     private float mCornerRadius = 0;
+    public static final int DEFAULT_COLOR = 0xff000000;
+
+    private RectF rectF;
+    private PorterDuffXfermode porterDuffXfermode;
 
     public RoundedImageView(Context context) {
         super(context, null);
+        rectF = new RectF();
+        porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
     }
 
     public RoundedImageView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        rectF = new RectF();
+        porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -30,27 +37,21 @@ public class RoundedImageView extends ImageView {
         Drawable myDrawable = getDrawable();
         if (myDrawable!=null && myDrawable instanceof BitmapDrawable && mCornerRadius > 0) {
             Paint paint = ((BitmapDrawable) myDrawable).getPaint();
-            final int color = 0xff000000;
-            Rect bitmapBounds = myDrawable.getBounds();
-            final RectF rectF = new RectF(bitmapBounds);
-            int saveCount = canvas.saveLayer(rectF, null,
-                    Canvas.MATRIX_SAVE_FLAG |
-                            Canvas.CLIP_SAVE_FLAG |
-                            Canvas.HAS_ALPHA_LAYER_SAVE_FLAG |
-                            Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
-                            Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+            rectF.set(myDrawable.getBounds());
+            int prevCount = canvas.saveLayer(rectF, null, Canvas.ALL_SAVE_FLAG);
             getImageMatrix().mapRect(rectF);
 
             paint.setAntiAlias(true);
             canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
+            paint.setColor(COLOR);
             canvas.drawRoundRect(rectF, mCornerRadius, mCornerRadius, paint);
 
-            Xfermode oldMode = paint.getXfermode();
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            Xfermode prevMode = paint.getXfermode();
+            paint.setXfermode(porterDuffXfermode);
             super.onDraw(canvas);
-            paint.setXfermode(oldMode);
-            canvas.restoreToCount(saveCount);
+
+            paint.setXfermode(prevMode);
+            canvas.restoreToCount(prevCount);
         } else {
             super.onDraw(canvas);
         }

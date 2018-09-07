@@ -12,6 +12,8 @@ import android.view.View;
 
 public class BlurKit {
 
+    private static final float FULL_SCALE = 1f;
+
     private static BlurKit instance;
 
     private RenderScript rs;
@@ -37,7 +39,7 @@ public class BlurKit {
     }
 
     public Bitmap blur(View src, int radius) {
-        Bitmap bitmap = getBitmapForView(src, 1f);
+        Bitmap bitmap = getBitmapForView(src, FULL_SCALE);
         return blur(bitmap, radius);
     }
 
