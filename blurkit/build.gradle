@@ -1,9 +1,9 @@
 apply plugin: 'com.android.library'
 
 ext {
-    PUBLISH_GROUP_ID = 'com.flurgle'
-    PUBLISH_ARTIFACT_ID = 'blurkit'
-    PUBLISH_VERSION = '1.1.1'
+    PUBLISH_GROUP_ID = 'com.alterac.blurkit'
+    PUBLISH_ARTIFACT_ID = 'blurkit-core'
+    PUBLISH_VERSION = '1.0.0'
 }
 
 android {
@@ -14,7 +14,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.1.0"
+        versionName "1.0.0"
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
     }

@@ -1,4 +1,4 @@
-package com.flurgle.blurkit;
+package com.alterac.blurkit;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -43,7 +43,7 @@ public class RoundedImageView extends ImageView {
 
             paint.setAntiAlias(true);
             canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(COLOR);
+            paint.setColor(DEFAULT_COLOR);
             canvas.drawRoundRect(rectF, mCornerRadius, mCornerRadius, paint);
 
             Xfermode prevMode = paint.getXfermode();

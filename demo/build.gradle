@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.flurgle.blurkit.demo"
+        applicationId "com.alterac.blurkit.demo"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
@@ -22,7 +22,7 @@ android {
 }
 
 repositories {
-    maven { url 'https://dl.bintray.com/flurgle/maven' }
+    maven { url 'https://dl.bintray.com/alterac/maven' }
 }
 
 dependencies {

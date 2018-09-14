@@ -1,4 +1,4 @@
-package com.flurgle.blurkit;
+package com.alterac.blurkit;
 
 public class BlurKitException extends Exception {
 

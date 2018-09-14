@@ -1,4 +1,4 @@
-package com.flurgle.blurkit;
+package com.alterac.blurkit;
 
 import android.content.Context;
 import android.graphics.Bitmap;
