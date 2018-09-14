@@ -21,7 +21,7 @@ This results in an average work/frame time of 2-4ms, which will be a seamless ex
 ## Setup
 Add __BlurKit__ to your dependencies block:
 ```groovy
-compile 'com.wonderkiln:blurkit:1.0.0'
+compile 'com.alterac.blurkit:blurkit-core:1.0.0'
 ```
 
 You also need to add __RenderScript__ to your app module. Add these lines to the `defaultConfig` block of your __build.gradle__.
@@ -49,6 +49,28 @@ Add a `BlurLayout` to your layout just like any other view.
         android:textColor="@android:color/white" />
 
 </com.wonderkiln.blurkit.BlurLayout>
+```
+In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` methods to include the `BlurLayout`.
+```java
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        blurLayout = findViewById(R.id.blurLayout);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        blurLayout.startBlur();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        blurLayout.pauseBlur();
+    }
 ```
 
 The layout background will continuously blur the content behind it. If you know your background content will be somewhat static, you can set the layout `fps` to `0`. At any time you can re-blur the background content by calling `invalidate()` on the `BlurLayout`. 
@@ -119,8 +141,8 @@ If you use Proguard, add the following to your proguard-rules.pro:
 - [ ] Support for use outside of an `Activity` (dialogs, etc.)
 - [ ] Enhance retrieval of background content to only include views drawn behind the `BlurLayout`.
 
-## Credits
-Built by [Dylan McIntyre](https://github.com/dwillmc).
-
 ## License
-BlurKit-Android is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
+BlurKit is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
+
+---
+ Blurkit is a sister project of [CameraKit](https://github.com/CameraKit/camerakit-android) and maintained by the CameraKit team.
