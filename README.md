@@ -1,11 +1,25 @@
-![BlurKit Header](.repo/BlurKit-Brand-Half.png)
+<p align="center">
+    <img alt='BlurKit Header' src='.repo/bk-gh-readme-header.svg' />
+</p>
+
+<p align="center">
+    <a href="https://buddy.works/" target="_blank">
+        <img alt='Buddy.Works' height="42px" src='https://assets.buddy.works/automated-dark.svg'/>
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://join-slack.camerakit.website"><img src="https://join-slack.camerakit.website/badge.svg" alt="Join Slack"></a>
+    <a href="https://codeclimate.com/github/CameraKit/blurkit-android/test_coverage"><img src="https://api.codeclimate.com/v1/badges/19e4407035c3b55f1bdb/test_coverage" alt="Code Climate Test Coverage"></a>
+    <a href="https://codeclimate.com/github/CameraKit/blurkit-android/maintainability"><img src="https://api.codeclimate.com/v1/badges/19e4407035c3b55f1bdb/maintainability" alt="Code Climate Maintainability"></a>
+</p>
 
 ## What Is BlurKit?
 BlurKit is an extraordinarily easy to use and performant utility to render real time blur effects in Android.
 
-
-
-![BlurKit Demo](.repo/demo.gif)
+<p align="center">
+    <img alt='BlurKit Demo' src='.repo/bk-demo.gif' />
+</p>
 
 ## Perfomance
 
