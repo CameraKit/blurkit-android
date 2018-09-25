@@ -7,15 +7,15 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
-        renderscriptTargetApi 25
+        renderscriptTargetApi 28
         renderscriptSupportModeEnabled true
     }
     buildTypes {

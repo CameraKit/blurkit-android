@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "com.alterac.blurkit.demo"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi 25
+        renderscriptTargetApi 28
         renderscriptSupportModeEnabled true
     }
     buildTypes {
@@ -26,6 +26,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:25.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation project(':blurkit')
 }
