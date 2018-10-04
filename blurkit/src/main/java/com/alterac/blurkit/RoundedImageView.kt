@@ -16,6 +16,10 @@ class RoundedImageView : ImageView {
     private var rectF: RectF? = null
     private var porterDuffXfermode: PorterDuffXfermode? = null
 
+    companion object {
+        const val DEFAULT_COLOR = -0x1000000
+    }
+
     constructor(context: Context) : super(context, null)
     constructor(context: Context, attributes: AttributeSet) : super(context, attributes)
 
@@ -24,6 +28,9 @@ class RoundedImageView : ImageView {
         porterDuffXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     }
 
+    /**
+     * Draw the RoundedImageView.
+     */
     override fun onDraw(canvas: Canvas) {
         val myDrawable = drawable
         if (myDrawable != null && myDrawable is BitmapDrawable && mCornerRadius > 0) {
@@ -31,7 +38,7 @@ class RoundedImageView : ImageView {
 
             rectF!!.set(myDrawable.bounds)
 
-            val prevCount = canvas.saveLayer(rectF, null, Canvas.ALL_SAVE_FLAG)
+            val prevCount = canvas.saveLayer(rectF, null)
 
             paint.isAntiAlias = true
             paint.color = DEFAULT_COLOR
@@ -50,11 +57,17 @@ class RoundedImageView : ImageView {
         }
     }
 
+    /**
+     * Set corner radius for RoundedImageView.
+     */
     fun setCornerRadius(cornerRadius: Float) {
         this.mCornerRadius = cornerRadius
     }
 
-    companion object {
-        const val DEFAULT_COLOR = -0x1000000
+    /**
+     * Get corner radius value.
+     */
+    fun getCornerRadius(): Float {
+        return this.mCornerRadius
     }
 }

@@ -378,6 +378,14 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get downscale factor.
+     * See {@link #mDownscaleFactor}.
+     */
+    public float getDownscaleFactor() {
+        return this.mDownscaleFactor;
+    }
+
+    /**
      * Sets blur radius to use on downscaled bitmap.
      * See {@link #mBlurRadius}.
      */
@@ -391,7 +399,15 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
-     * Sets FPS to invalidate blur with.
+     * Get blur radius to use on downscaled bitmap.
+     * See {@link #mBlurRadius}.
+     */
+    public int getBlurRadius() {
+        return this.mBlurRadius;
+    }
+
+    /**
+     * Sets FPS to invalidate blur.
      * See {@link #mFPS}.
      */
     public void setFPS(int fps) {
@@ -406,6 +422,14 @@ public class BlurLayout extends FrameLayout {
         }
     }
 
+    /**
+     * Get FPS value.
+     * See {@link #mFPS}.
+     */
+    public int getFPS() {
+        return this.mFPS;
+    }
+
     public void setCornerRadius(float cornerRadius) {
         this.mCornerRadius = cornerRadius;
         if (mImageView != null) {
@@ -415,7 +439,16 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get corner radius value.
+     * See {@link #mFPS}.
+     */
+    public float getCornerRadius() {
+        return mCornerRadius;
+    }
+
+    /**
      * Save the view bitmap to be re-used each frame instead of regenerating.
+     * See {@link #mViewLocked}.
      */
     public void lockView() {
         mViewLocked = true;
@@ -435,6 +468,7 @@ public class BlurLayout extends FrameLayout {
 
     /**
      * Stop using saved view bitmap. View bitmap will now be re-made each frame.
+     * See {@link #mViewLocked}.
      */
     public void unlockView() {
         mViewLocked = false;
@@ -442,7 +476,16 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get the view locked value.
+     * See {@link #mViewLocked}.
+     */
+    public boolean getViewLocked() {
+        return mViewLocked;
+    }
+
+    /**
      * Save the view position to be re-used each frame instead of regenerating.
+     * See {@link #mPositionLocked}.
      */
     public void lockPosition() {
         mPositionLocked = true;
@@ -451,10 +494,19 @@ public class BlurLayout extends FrameLayout {
 
     /**
      * Stop using saved point. Point will now be re-made each frame.
+     * See {@link #mPositionLocked}.
      */
     public void unlockPosition() {
         mPositionLocked = false;
         mLockedPoint = null;
+    }
+
+    /**
+     * Get the locked position value.
+     * See {@link #mPositionLocked}.
+     */
+    public boolean getPositionLocked() {
+        return mPositionLocked;
     }
 
 }
