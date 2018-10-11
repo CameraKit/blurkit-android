@@ -3,15 +3,12 @@
 </p>
 
 <p align="center">
-    <a href="https://buddy.works/" target="_blank">
-        <img alt='Buddy.Works' height="42px" src='https://assets.buddy.works/automated-dark.svg'/>
+    <a href="https://spectrum.chat/camerakit/blurkit/">
+        <img alt="Join Spectrum" height="42px" src=".repo/bk-gh-readme-spectrum-button.svg" >
     </a>
-</p>
-
-<p align="center">
-    <a href="https://join-slack.camerakit.website"><img src="https://join-slack.camerakit.website/badge.svg" alt="Join Slack"></a>
-    <a href="https://codeclimate.com/github/CameraKit/blurkit-android/test_coverage"><img src="https://api.codeclimate.com/v1/badges/19e4407035c3b55f1bdb/test_coverage" alt="Code Climate Test Coverage"></a>
-    <a href="https://codeclimate.com/github/CameraKit/blurkit-android/maintainability"><img src="https://api.codeclimate.com/v1/badges/19e4407035c3b55f1bdb/maintainability" alt="Code Climate Maintainability"></a>
+    <a href="https://buddy.works/" target="_blank">
+        <img alt='Buddy.Works' height="41px" src='https://assets.buddy.works/automated-dark.svg'/>
+    </a>
 </p>
 
 ## What Is BlurKit?
@@ -33,16 +30,11 @@ BlurKit is faster than other blurring libraries due to a number of bitmap retrie
 This results in an average work/frame time of 2-4ms, which will be a seamless experience for most users and apps.
 
 ## Setup
-Add __BlurKit__ to your dependencies block:
+Add __BlurKit__ to the dependencies block of your app level `build.gradle`:
 ```groovy
-compile 'com.alterac.blurkit:blurkit-core:1.0.0'
-```
-
-You also need to add __RenderScript__ to your app module. Add these lines to the `defaultConfig` block of your __build.gradle__.
-
-```groovy
-renderscriptTargetApi 24
-renderscriptSupportModeEnabled true
+dependencies {
+    implementation 'io.alterac.blurkit:blurkit:1.0.0'
+}
 ```
 
 ## Usage
@@ -64,7 +56,7 @@ Add a `BlurLayout` to your layout just like any other view.
 
 </com.wonderkiln.blurkit.BlurLayout>
 ```
-In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` methods to include the `BlurLayout`.
+In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` methods to include the `BlurLayout` functionality.
 ```java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +74,15 @@ In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` 
 
     @Override
     protected void onStop() {
-        super.onStop();
         blurLayout.pauseBlur();
+        super.onStop();
     }
 ```
 
 The layout background will continuously blur the content behind it. If you know your background content will be somewhat static, you can set the layout `fps` to `0`. At any time you can re-blur the background content by calling `invalidate()` on the `BlurLayout`. 
 
 ```xml
-<com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -100,7 +92,7 @@ The layout background will continuously blur the content behind it. If you know 
 Other attributes you can configure are the blur radius and the downscale factor. Getting these to work together well can take some experimentation. The downscale factor is a performance optimization; the bitmap for the background content will be downsized by this factor before being drawn and blurred.
 
 ```xml
-<com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -137,18 +129,7 @@ You can also __fastBlur__ a `View`. This optimizes the view blurring process by 
 BlurKit.getInstance().fastBlur(View src, int radius, float downscaleFactor);
 ```
 
-## Proguard
-If you use Proguard, add the following to your proguard-rules.pro:
 
-```
--keep class com.wonderkiln.blurkit.** { *; }
-
--dontwarn android.support.v8.renderscript.*
--keepclassmembers class android.support.v8.renderscript.RenderScript {
-  native *** rsn*(...);
-  native *** n*(...);
-}
-```
 
 ## Upcoming Features
 - [ ] `SurfaceView` support
