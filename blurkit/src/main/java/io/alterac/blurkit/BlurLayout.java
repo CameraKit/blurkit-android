@@ -1,4 +1,4 @@
-package com.flurgle.blurkit;
+package io.alterac.blurkit;
 
 import android.app.Activity;
 import android.content.Context;
@@ -78,12 +78,12 @@ public class BlurLayout extends FrameLayout {
         super(context, attrs);
 
         if (!isInEditMode()) {
-            com.flurgle.blurkit.BlurKit.init(context);
+            BlurKit.init(context);
         }
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                com.flurgle.blurkit.R.styleable.BlurLayout,
+                io.alterac.blurkit.R.styleable.BlurLayout,
                 0, 0);
 
         try {
@@ -255,7 +255,7 @@ public class BlurLayout extends FrameLayout {
                         ),
                         mDownscaleFactor
                 );
-            } catch (com.flurgle.blurkit.BlurKitException e) {
+            } catch (BlurKitException e) {
                 return null;
             } catch (NullPointerException e) {
                 return null;
@@ -265,7 +265,7 @@ public class BlurLayout extends FrameLayout {
 
         if (!mViewLocked) {
             // Blur the bitmap.
-            bitmap = com.flurgle.blurkit.BlurKit.getInstance().blur(bitmap, mBlurRadius);
+            bitmap = BlurKit.getInstance().blur(bitmap, mBlurRadius);
 
             //Crop the bitmap again to remove the padding.
             bitmap = Bitmap.createBitmap(
@@ -340,14 +340,14 @@ public class BlurLayout extends FrameLayout {
      * @return Bitmap made from view, downscaled by downscaleFactor.
      * @throws NullPointerException
      */
-    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws com.flurgle.blurkit.BlurKitException, NullPointerException {
+    private Bitmap getDownscaledBitmapForView(View view, Rect crop, float downscaleFactor) throws BlurKitException, NullPointerException {
         View screenView = view.getRootView();
 
         int width = (int) (crop.width() * downscaleFactor);
         int height = (int) (crop.height() * downscaleFactor);
 
         if (screenView.getWidth() <= 0 || screenView.getHeight() <= 0 || width <= 0 || height <= 0) {
-            throw new com.flurgle.blurkit.BlurKitException("No screen available (width or height = 0)");
+            throw new BlurKitException("No screen available (width or height = 0)");
         }
 
         float dx = -crop.left * downscaleFactor;
@@ -378,6 +378,14 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get downscale factor.
+     * See {@link #mDownscaleFactor}.
+     */
+    public float getDownscaleFactor() {
+        return this.mDownscaleFactor;
+    }
+
+    /**
      * Sets blur radius to use on downscaled bitmap.
      * See {@link #mBlurRadius}.
      */
@@ -391,7 +399,15 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
-     * Sets FPS to invalidate blur with.
+     * Get blur radius to use on downscaled bitmap.
+     * See {@link #mBlurRadius}.
+     */
+    public int getBlurRadius() {
+        return this.mBlurRadius;
+    }
+
+    /**
+     * Sets FPS to invalidate blur.
      * See {@link #mFPS}.
      */
     public void setFPS(int fps) {
@@ -406,6 +422,14 @@ public class BlurLayout extends FrameLayout {
         }
     }
 
+    /**
+     * Get FPS value.
+     * See {@link #mFPS}.
+     */
+    public int getFPS() {
+        return this.mFPS;
+    }
+
     public void setCornerRadius(float cornerRadius) {
         this.mCornerRadius = cornerRadius;
         if (mImageView != null) {
@@ -415,7 +439,16 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get corner radius value.
+     * See {@link #mFPS}.
+     */
+    public float getCornerRadius() {
+        return mCornerRadius;
+    }
+
+    /**
      * Save the view bitmap to be re-used each frame instead of regenerating.
+     * See {@link #mViewLocked}.
      */
     public void lockView() {
         mViewLocked = true;
@@ -426,7 +459,7 @@ public class BlurLayout extends FrameLayout {
                 setAlpha(0f);
                 mLockedBitmap = getDownscaledBitmapForView(view, new Rect(0, 0, view.getWidth(), view.getHeight()), mDownscaleFactor);
                 setAlpha(1f);
-                mLockedBitmap = com.flurgle.blurkit.BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
+                mLockedBitmap = BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
             } catch (Exception e) {
                 // ignore
             }
@@ -435,6 +468,7 @@ public class BlurLayout extends FrameLayout {
 
     /**
      * Stop using saved view bitmap. View bitmap will now be re-made each frame.
+     * See {@link #mViewLocked}.
      */
     public void unlockView() {
         mViewLocked = false;
@@ -442,7 +476,16 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Get the view locked value.
+     * See {@link #mViewLocked}.
+     */
+    public boolean getViewLocked() {
+        return mViewLocked;
+    }
+
+    /**
      * Save the view position to be re-used each frame instead of regenerating.
+     * See {@link #mPositionLocked}.
      */
     public void lockPosition() {
         mPositionLocked = true;
@@ -451,10 +494,19 @@ public class BlurLayout extends FrameLayout {
 
     /**
      * Stop using saved point. Point will now be re-made each frame.
+     * See {@link #mPositionLocked}.
      */
     public void unlockPosition() {
         mPositionLocked = false;
         mLockedPoint = null;
+    }
+
+    /**
+     * Get the locked position value.
+     * See {@link #mPositionLocked}.
+     */
+    public boolean getPositionLocked() {
+        return mPositionLocked;
     }
 
 }

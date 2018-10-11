@@ -1,22 +1,30 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'com.github.dcendents.android-maven' version '1.5'
+}
 
 ext {
-    PUBLISH_GROUP_ID = 'com.flurgle'
+    PUBLISH_GROUP_ID = 'io.alterac.blurkit'
     PUBLISH_ARTIFACT_ID = 'blurkit'
-    PUBLISH_VERSION = '1.1.1'
+    PUBLISH_VERSION = '1.0.0'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "1.1.0"
-        renderscriptTargetApi 25
+        versionName "1.0.0"
+        renderscriptTargetApi 28
         renderscriptSupportModeEnabled true
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
     buildTypes {
         release {
@@ -27,6 +35,24 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+
 }
 
-apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            groupId project.group
+            artifactId 'blurkit'
+            packaging 'aar'
+        }
+    }
+}
+
+apply from : 'deploy.gradle'

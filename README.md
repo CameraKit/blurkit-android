@@ -1,8 +1,22 @@
-![BlurKit Header](.repo/blurkit-android-header.png)
+<p align="center">
+    <img alt='BlurKit Header' src='.repo/bk-gh-readme-header.svg' />
+</p>
 
-BlurKit is an extraordinarily easy to use utility to get live blurring just like on iOS. Built by [Dylan McIntyre](https://github.com/dwillmc).
+<p align="center">
+    <a href="https://spectrum.chat/camerakit/blurkit/">
+        <img alt="Join Spectrum" height="42px" src=".repo/bk-gh-readme-spectrum-button.svg" >
+    </a>
+    <a href="https://buddy.works/" target="_blank">
+        <img alt='Buddy.Works' height="41px" src='https://assets.buddy.works/automated-dark.svg'/>
+    </a>
+</p>
 
-![BlurKit Demo](.repo/demo.gif)
+## What Is BlurKit?
+BlurKit is an extraordinarily easy to use and performant utility to render real time blur effects in Android.
+
+<p align="center">
+    <img alt='BlurKit Demo' src='.repo/bk-demo.gif' />
+</p>
 
 ## Perfomance
 
@@ -16,16 +30,11 @@ BlurKit is faster than other blurring libraries due to a number of bitmap retrie
 This results in an average work/frame time of 2-4ms, which will be a seamless experience for most users and apps.
 
 ## Setup
-Add __BlurKit__ to your dependencies block:
+Add __BlurKit__ to the dependencies block of your app level `build.gradle`:
 ```groovy
-compile 'com.wonderkiln:blurkit:1.0.0'
-```
-
-You also need to add __RenderScript__ to your app module. Add these lines to the `defaultConfig` block of your __build.gradle__.
-
-```groovy
-renderscriptTargetApi 24
-renderscriptSupportModeEnabled true
+dependencies {
+    implementation 'io.alterac.blurkit:blurkit:1.0.0'
+}
 ```
 
 ## Usage
@@ -47,11 +56,33 @@ Add a `BlurLayout` to your layout just like any other view.
 
 </com.wonderkiln.blurkit.BlurLayout>
 ```
+In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` methods to include the `BlurLayout` functionality.
+```java
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        blurLayout = findViewById(R.id.blurLayout);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        blurLayout.startBlur();
+
+    }
+
+    @Override
+    protected void onStop() {
+        blurLayout.pauseBlur();
+        super.onStop();
+    }
+```
 
 The layout background will continuously blur the content behind it. If you know your background content will be somewhat static, you can set the layout `fps` to `0`. At any time you can re-blur the background content by calling `invalidate()` on the `BlurLayout`. 
 
 ```xml
-<com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -61,7 +92,7 @@ The layout background will continuously blur the content behind it. If you know 
 Other attributes you can configure are the blur radius and the downscale factor. Getting these to work together well can take some experimentation. The downscale factor is a performance optimization; the bitmap for the background content will be downsized by this factor before being drawn and blurred.
 
 ```xml
-<com.wonderkiln.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -70,7 +101,7 @@ Other attributes you can configure are the blur radius and the downscale factor.
     blurkit:blk_fps="60" />
 ```
 
-### Other
+### Creating BlurKit Outside Of A Layout
 You can use the `BlurKit` class which has a few useful blurring utilities. Before using this class outside of a `BlurLayout`, you need to initialize `BlurKit`.
 
 ```java
@@ -98,26 +129,15 @@ You can also __fastBlur__ a `View`. This optimizes the view blurring process by 
 BlurKit.getInstance().fastBlur(View src, int radius, float downscaleFactor);
 ```
 
-## Proguard
-If you use Proguard, add the following to your proguard-rules.pro:
 
-```
--keep class com.wonderkiln.blurkit.** { *; }
 
--dontwarn android.support.v8.renderscript.*
--keepclassmembers class android.support.v8.renderscript.RenderScript {
-  native *** rsn*(...);
-  native *** n*(...);
-}
-```
-
-## To Do (incoming!)
+## Upcoming Features
 - [ ] `SurfaceView` support
 - [ ] Support for use outside of an `Activity` (dialogs, etc.)
 - [ ] Enhance retrieval of background content to only include views drawn behind the `BlurLayout`.
 
-## Credits
-Dylan McIntyre
-
 ## License
-BlurKit-Android is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
+BlurKit is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
+
+---
+ Blurkit is a sister project of [CameraKit](https://github.com/CameraKit/camerakit-android) and maintained by the CameraKit team.
