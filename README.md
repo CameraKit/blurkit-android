@@ -9,6 +9,7 @@
     <a href="https://buddy.works/" target="_blank">
         <img alt='Buddy.Works' height="41px" src='https://assets.buddy.works/automated-dark.svg'/>
     </a>
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2FCameraKit%2Fblurkit-android?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FCameraKit%2Fblurkit-android.svg?type=shield"/></a>
 </p>
 
 ## What Is BlurKit?
@@ -141,3 +142,5 @@ BlurKit is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/mas
 
 ---
  Blurkit is a sister project of [CameraKit](https://github.com/CameraKit/camerakit-android) and maintained by the CameraKit team.
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FCameraKit%2Fblurkit-android.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FCameraKit%2Fblurkit-android?ref=badge_large)
