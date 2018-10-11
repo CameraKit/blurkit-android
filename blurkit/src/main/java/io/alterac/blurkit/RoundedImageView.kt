@@ -1,4 +1,4 @@
-package com.alterac.blurkit
+package io.alterac.blurkit
 
 import android.content.Context
 import android.graphics.Canvas

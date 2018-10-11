@@ -1,11 +1,11 @@
-package com.alterac.blurkit.demo;
+package io.alterac.blurkit.demo;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.alterac.blurkit.BlurLayout;
+import io.alterac.blurkit.BlurLayout;
 
 public class MainActivity extends AppCompatActivity {
 

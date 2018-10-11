@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.2'
     defaultConfig {
-        applicationId "com.alterac.blurkit.demo"
+        applicationId "io.alterac.blurkit.demo"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -19,10 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-repositories {
-    maven { url 'https://dl.bintray.com/alterac/maven' }
 }
 
 dependencies {
