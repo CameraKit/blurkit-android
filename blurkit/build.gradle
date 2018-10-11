@@ -1,19 +1,22 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'com.github.dcendents.android-maven' version '1.5'
+}
 
 ext {
-    PUBLISH_GROUP_ID = 'com.alterac.blurkit'
-    PUBLISH_ARTIFACT_ID = 'blurkit-core'
+    PUBLISH_GROUP_ID = 'io.alterac.blurkit'
+    PUBLISH_ARTIFACT_ID = 'blurkit'
     PUBLISH_VERSION = '1.0.0'
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion versions.compileSdk
     buildToolsVersion '28.0.2'
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0.0"
         renderscriptTargetApi 28
@@ -42,7 +45,14 @@ dependencies {
 
 }
 
-apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
-repositories {
-    mavenCentral()
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            groupId project.group
+            artifactId 'blurkit'
+            packaging 'aar'
+        }
+    }
 }
+
+apply from : 'deploy.gradle'

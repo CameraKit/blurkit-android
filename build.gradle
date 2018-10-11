@@ -9,16 +9,25 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
     }
 }
 
-allprojects {
+allprojects { project ->
+    group = 'io.alterac.blurkit'
+    version = '1.0.0'
+
     repositories {
         google()
         jcenter()
+    }
+
+    ext {
+        versions = [
+                minSdk      : 21,
+                targetSdk   : 28,
+                compileSdk  : 28,
+        ]
     }
 }
 

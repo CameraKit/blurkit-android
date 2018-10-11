@@ -1,0 +1,85 @@
+def getBintrayUser() {
+    if (System.getenv('BINTRAY_USER')) {
+        logger.lifecycle(System.getenv('BINTRAY_USER'))
+        return System.getenv('BINTRAY_USER')
+    } else if (rootProject.file('local.properties').exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        return properties.getProperty('bintray.user')
+    } else {
+        logger.lifecycle("Warning: Could not find BINTRAY_USER in environment or local.properties")
+    }
+}
+
+def getBintrayKey() {
+    if (System.getenv('BINTRAY_KEY')) {
+        logger.lifecycle(System.getenv('BINTRAY_KEY'))
+        return System.getenv('BINTRAY_KEY')
+    } else if (rootProject.file('local.properties').exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        return properties.getProperty('bintray.key')
+    } else {
+        logger.lifecycle("Warning: Could not find BINTRAY_KEY in environment or local.properties")
+    }
+}
+
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+    user = getBintrayUser()
+    key = getBintrayKey()
+    configurations = ['archives']
+    pkg {
+        repo = 'other'
+        name = 'blurkit-android'
+        userOrg = 'camerakit'
+        vcsUrl = 'https://github.com/CameraKit/blurkit-android.git'
+        licenses = ['MIT']
+
+        version {
+            name = project.version
+            released = new Date()
+        }
+    }
+}
+
+task cleanForDeployment {
+    doLast {
+        logger.lifecycle('BlurKit: Deployment: Cleaning...')
+        logger.lifecycle('Deleting: ' + project.buildDir)
+        delete project.buildDir
+    }
+}
+
+task buildForDeployment {
+    logger.lifecycle('BlurKit: Deployment: Building...')
+    shouldRunAfter(cleanForDeployment)
+    finalizedBy assemble
+
+    doFirst {
+        android.variantFilter { variant ->
+            if (variant.buildType.name == 'debug') {
+                variant.setIgnore(true)
+            }
+        }
+    }
+}
+
+task deployRelease {
+    logger.lifecycle('BlurKit - Starting Release Deployment')
+    shouldRunAfter(buildForDeployment)
+
+    dependsOn cleanForDeployment
+    dependsOn buildForDeployment
+    finalizedBy bintrayUpload
+
+    doLast {
+        logger.lifecycle(bintrayUpload.getVersionName())
+        bintrayUpload.setVersionName(bintrayUpload.getVersionName())
+        bintrayUpload.setUserOrg('camerakit')
+        bintrayUpload.setRepoName('other')
+
+        logger.lifecycle('Deploying version ' + bintrayUpload.getVersionName() + ' in ' + bintrayUpload.getRepoName())
+    }
+}
