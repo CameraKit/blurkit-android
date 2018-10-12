@@ -30,7 +30,16 @@ BlurKit is faster than other blurring libraries due to a number of bitmap retrie
 This results in an average work/frame time of 2-4ms, which will be a seamless experience for most users and apps.
 
 ## Setup
-Add __BlurKit__ to the dependencies block of your app level `build.gradle`:
+First add this line to the repositories block to the app level `build.gradle`:
+```groovy
+repositories {
+    maven {
+        url  "https://camerakit.bintray.com/other" 
+    }
+}
+```
+
+Then add __BlurKit__ to the dependencies block of the same app level `build.gradle`:
 ```groovy
 dependencies {
     implementation 'io.alterac.blurkit:blurkit:1.0.0'
