@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.view.View;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.view.View;
 
 public class BlurKit {
 
@@ -24,7 +24,7 @@ public class BlurKit {
         }
 
         instance = new BlurKit();
-        rs = RenderScript.create(context);
+        rs = RenderScript.create(context.getApplicationContext());
     }
 
     public Bitmap blur(Bitmap src, int radius) {
