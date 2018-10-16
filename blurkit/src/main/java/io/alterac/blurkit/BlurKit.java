@@ -56,9 +56,11 @@ public class BlurKit {
         );
 
         Canvas canvas = new Canvas(bitmap);
-        Matrix matrix = new Matrix();
-        matrix.preScale(downscaleFactor, downscaleFactor);
-        canvas.setMatrix(matrix);
+        if (downscaleFactor != FULL_SCALE) {
+            Matrix matrix = new Matrix();
+            matrix.preScale(downscaleFactor, downscaleFactor);
+            canvas.setMatrix(matrix);
+        }
         src.draw(canvas);
 
         return bitmap;
