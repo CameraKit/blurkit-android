@@ -30,16 +30,7 @@ BlurKit is faster than other blurring libraries due to a number of bitmap retrie
 This results in an average work/frame time of 2-4ms, which will be a seamless experience for most users and apps.
 
 ## Setup
-First add this line to the repositories block to the app level `build.gradle`:
-```groovy
-repositories {
-    maven {
-        url  "https://camerakit.bintray.com/other" 
-    }
-}
-```
-
-Then add __BlurKit__ to the dependencies block of the same app level `build.gradle`:
+Add __BlurKit__ to the dependencies block of the app level `build.gradle`:
 ```groovy
 dependencies {
     implementation 'io.alterac.blurkit:blurkit:1.0.0'
@@ -48,50 +39,42 @@ dependencies {
 
 ## Usage
 ### BlurLayout
-Add a `BlurLayout` to your layout just like any other view.
+Add a `BlurLayout` to your XML layout just like any other view.
 
 ```xml
-<com.wonderkiln.blurkit.BlurLayout
+<io.alterac.blurkit.BlurLayout
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
-    android:layout_height="150dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="BlurKit!"
-        android:textColor="@android:color/white" />
-
-</com.wonderkiln.blurkit.BlurLayout>
+    android:layout_height="150dp"/>
 ```
 In the `Main_Activity.java` you need to override the `onStart()` and `onStop()` methods to include the `BlurLayout` functionality.
 ```java
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        blurLayout = findViewById(R.id.blurLayout);
-    }
+BlurLayout blurLayout;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        blurLayout.startBlur();
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    blurLayout = findViewById(R.id.blurLayout);
+}
 
-    }
+@Override
+protected void onStart() {
+    super.onStart();
+    blurLayout.startBlur();
+}
 
-    @Override
-    protected void onStop() {
-        blurLayout.pauseBlur();
-        super.onStop();
-    }
+@Override
+protected void onStop() {
+    blurLayout.pauseBlur();
+    super.onStop();
+}
 ```
 
 The layout background will continuously blur the content behind it. If you know your background content will be somewhat static, you can set the layout `fps` to `0`. At any time you can re-blur the background content by calling `invalidate()` on the `BlurLayout`. 
 
 ```xml
-<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -101,7 +84,7 @@ The layout background will continuously blur the content behind it. If you know 
 Other attributes you can configure are the blur radius and the downscale factor. Getting these to work together well can take some experimentation. The downscale factor is a performance optimization; the bitmap for the background content will be downsized by this factor before being drawn and blurred.
 
 ```xml
-<io.alterac.blurkit.BlurLayout xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+<io.alterac.blurkit.BlurLayout
     android:id="@+id/blurLayout"
     android:layout_width="150dp"
     android:layout_height="150dp"
@@ -146,7 +129,7 @@ BlurKit.getInstance().fastBlur(View src, int radius, float downscaleFactor);
 - [ ] Enhance retrieval of background content to only include views drawn behind the `BlurLayout`.
 
 ## License
-BlurKit is [MIT licensed](https://github.com/wonderkiln/blurkit-android/blob/master/LICENSE).
+BlurKit is [MIT licensed](https://github.com/CameraKit/blurkit-android/blob/master/LICENSE).
 
 ---
  Blurkit is a sister project of [CameraKit](https://github.com/CameraKit/camerakit-android) and maintained by the CameraKit team.
