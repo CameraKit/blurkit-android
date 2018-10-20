@@ -30,4 +30,13 @@
 
     </io.alterac.blurkit.BlurLayout>
 
+    <Button
+        android:id="@+id/alpha_animation_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="@string/alpha_animation_button_text" />
+
 </RelativeLayout>

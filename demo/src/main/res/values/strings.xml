@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BlurKit Demo</string>
+    <string name="alpha_animation_button_text">Play/Pause alpha animation</string>
 </resources>

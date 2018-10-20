@@ -70,6 +70,9 @@ public class BlurLayout extends FrameLayout {
     /** A saved bitmap for the view to re-use when {@link #lockView()} called. */
     private Bitmap mLockedBitmap;
 
+    /** A saved alpha */
+    private float mLockedAlpha = Float.NaN;
+
     public BlurLayout(Context context) {
         super(context, null);
     }
@@ -195,7 +198,10 @@ public class BlurLayout extends FrameLayout {
 
         // Set alpha to 0 before creating the parent view bitmap.
         // The blur view shouldn't be visible in the created bitmap.
-        setAlpha(0);
+        if (Float.isNaN(mLockedAlpha)) {
+            mLockedAlpha = getAlpha();
+        }
+        super.setAlpha(0);
 
         // Screen sizes for bound checks
         int screenWidth = mActivityView.get().getWidth();
@@ -279,7 +285,7 @@ public class BlurLayout extends FrameLayout {
         }
 
         // Make self visible again.
-        setAlpha(1);
+        super.setAlpha(mLockedAlpha);
 
         // Set background as blurred bitmap.
         return bitmap;
@@ -456,9 +462,12 @@ public class BlurLayout extends FrameLayout {
         if (mActivityView != null && mActivityView.get() != null) {
             View view = mActivityView.get().getRootView();
             try {
-                setAlpha(0f);
+                if (Float.isNaN(mLockedAlpha)) {
+                    mLockedAlpha = getAlpha();
+                }
+                super.setAlpha(0f);
                 mLockedBitmap = getDownscaledBitmapForView(view, new Rect(0, 0, view.getWidth(), view.getHeight()), mDownscaleFactor);
-                setAlpha(1f);
+                super.setAlpha(mLockedAlpha);
                 mLockedBitmap = BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
             } catch (Exception e) {
                 // ignore
@@ -507,6 +516,14 @@ public class BlurLayout extends FrameLayout {
      */
     public boolean getPositionLocked() {
         return mPositionLocked;
+    }
+
+    @Override
+    public void setAlpha(float alpha) {
+        mLockedAlpha = alpha;
+        if (!mViewLocked) {
+            super.setAlpha(alpha);
+        }
     }
 
 }
