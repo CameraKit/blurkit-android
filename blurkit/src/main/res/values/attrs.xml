@@ -6,6 +6,7 @@
         <attr name="blk_blurRadius" format="integer" />
         <attr name="blk_fps" format="integer" />
         <attr name="blk_cornerRadius" format="dimension" />
+        <attr name="blk_alpha" format="float" />
     </declare-styleable>
 
 </resources>

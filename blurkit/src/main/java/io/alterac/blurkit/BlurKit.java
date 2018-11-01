@@ -24,7 +24,7 @@ public class BlurKit {
         }
 
         instance = new BlurKit();
-        rs = RenderScript.create(context);
+        rs = RenderScript.create(context.getApplicationContext());
     }
 
     public Bitmap blur(Bitmap src, int radius) {
@@ -39,7 +39,7 @@ public class BlurKit {
     }
 
     public Bitmap blur(View src, int radius) {
-        Bitmap bitmap = getBitmapForView(src, FULL_SCALE);
+        Bitmap bitmap = getBitmapForView(src);
         return blur(bitmap, radius);
     }
 
@@ -59,6 +59,19 @@ public class BlurKit {
         Matrix matrix = new Matrix();
         matrix.preScale(downscaleFactor, downscaleFactor);
         canvas.setMatrix(matrix);
+        src.draw(canvas);
+
+        return bitmap;
+    }
+
+    private Bitmap getBitmapForView(View src) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                src.getWidth(),
+                src.getHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvas = new Canvas(bitmap);
         src.draw(canvas);
 
         return bitmap;
