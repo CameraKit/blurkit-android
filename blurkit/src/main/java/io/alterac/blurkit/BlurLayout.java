@@ -219,13 +219,13 @@ public class BlurLayout extends FrameLayout {
         leftOffset = x + leftOffset >= 0 ? leftOffset : 0;
 
         int rightOffset = xPadding;
-        rightOffset = x + getWidth() + rightOffset <= screenWidth ? rightOffset : screenWidth - getWidth() - x;
+        rightOffset = x + screenWidth - rightOffset <= screenWidth ? rightOffset : screenWidth + screenWidth - x;
 
         int topOffset = -yPadding;
         topOffset = y + topOffset >= 0 ? topOffset : 0;
 
         int bottomOffset = yPadding;
-        bottomOffset = y + height + bottomOffset <= screenHeight ? bottomOffset : 0;
+        bottomOffset = y + getHeight() + bottomOffset <= screenHeight ? bottomOffset : 0;
 
         // Parent view bitmap, downscaled with mDownscaleFactor
         Bitmap bitmap;
