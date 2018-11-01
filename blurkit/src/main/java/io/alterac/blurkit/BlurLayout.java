@@ -29,6 +29,7 @@ public class BlurLayout extends FrameLayout {
     public static final int DEFAULT_BLUR_RADIUS = 12;
     public static final int DEFAULT_FPS = 60;
     public static final float DEFAULT_CORNER_RADIUS = 0.f;
+    public static final float DEFAULT_ALPHA = Float.NaN;
 
     // Customizable attributes
 
@@ -43,6 +44,9 @@ public class BlurLayout extends FrameLayout {
 
     /** Corner radius for the layouts blur. To make rounded rects and circles. */
     private float mCornerRadius;
+
+    /** Alpha value to set transparency */
+    private float mAlpha;
 
     /** Is blur running? */
     private boolean mRunning;
@@ -91,6 +95,7 @@ public class BlurLayout extends FrameLayout {
             mBlurRadius = a.getInteger(R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
             mFPS = a.getInteger(R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
             mCornerRadius = a.getDimension(R.styleable.BlurLayout_blk_cornerRadius, DEFAULT_CORNER_RADIUS);
+            mAlpha = a.getDimension(R.styleable.BlurLayout_blk_alpha, DEFAULT_ALPHA);
         } finally {
             a.recycle();
         }
@@ -195,7 +200,7 @@ public class BlurLayout extends FrameLayout {
 
         // Set alpha to 0 before creating the parent view bitmap.
         // The blur view shouldn't be visible in the created bitmap.
-        setAlpha(0);
+        super.setAlpha(0);
 
         // Screen sizes for bound checks
         int screenWidth = mActivityView.get().getWidth();
@@ -279,7 +284,11 @@ public class BlurLayout extends FrameLayout {
         }
 
         // Make self visible again.
-        setAlpha(1);
+        if (Float.isNaN(mAlpha)) {
+            super.setAlpha(1);
+        } else {
+            super.setAlpha(mAlpha);
+        }
 
         // Set background as blurred bitmap.
         return bitmap;
@@ -447,6 +456,25 @@ public class BlurLayout extends FrameLayout {
     }
 
     /**
+     * Set the alpha value
+     * See {@link #mAlpha}
+     */
+    public void setAlpha(float alpha) {
+        mAlpha = alpha;
+        if (!mViewLocked) {
+            super.setAlpha(mAlpha);
+        }
+    }
+
+    /**
+     * Get alpha value.
+     * See {@link #mAlpha}
+     */
+    public float getAlpha() {
+        return mAlpha;
+    }
+
+    /**
      * Save the view bitmap to be re-used each frame instead of regenerating.
      * See {@link #mViewLocked}.
      */
@@ -456,9 +484,16 @@ public class BlurLayout extends FrameLayout {
         if (mActivityView != null && mActivityView.get() != null) {
             View view = mActivityView.get().getRootView();
             try {
-                setAlpha(0f);
+                super.setAlpha(0f);
+
                 mLockedBitmap = getDownscaledBitmapForView(view, new Rect(0, 0, view.getWidth(), view.getHeight()), mDownscaleFactor);
-                setAlpha(1f);
+
+                if (Float.isNaN(mAlpha)) {
+                    super.setAlpha(1);
+                } else {
+                    super.setAlpha(mAlpha);
+                }
+
                 mLockedBitmap = BlurKit.getInstance().blur(mLockedBitmap, mBlurRadius);
             } catch (Exception e) {
                 // ignore
