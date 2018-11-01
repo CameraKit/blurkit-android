@@ -24,7 +24,7 @@ public class BlurKit {
         }
 
         instance = new BlurKit();
-        rs = RenderScript.create(context);
+        rs = RenderScript.create(context.getApplicationContext());
     }
 
     public Bitmap blur(Bitmap src, int radius) {
