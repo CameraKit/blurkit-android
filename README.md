@@ -33,7 +33,7 @@ This results in an average work/frame time of 2-4ms, which will be a seamless ex
 Add __BlurKit__ to the dependencies block of the app level `build.gradle`:
 ```groovy
 dependencies {
-    implementation 'io.alterac.blurkit:blurkit:1.0.0'
+    implementation 'io.alterac.blurkit:blurkit:1.1.0'
 }
 ```
 
