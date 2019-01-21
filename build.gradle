@@ -6,14 +6,14 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
     }
 }
 
 allprojects { project ->
     group = 'io.alterac.blurkit'
-    version = '1.1.0'
+    version = '1.1.1'
 
     repositories {
         google()
@@ -22,7 +22,7 @@ allprojects { project ->
 
     ext {
         versions = [
-                minSdk      : 21,
+                minSdk      : 17,
                 targetSdk   : 28,
                 compileSdk  : 28,
         ]
