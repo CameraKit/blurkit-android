@@ -95,7 +95,7 @@ public class BlurLayout extends FrameLayout {
             mBlurRadius = a.getInteger(R.styleable.BlurLayout_blk_blurRadius, DEFAULT_BLUR_RADIUS);
             mFPS = a.getInteger(R.styleable.BlurLayout_blk_fps, DEFAULT_FPS);
             mCornerRadius = a.getDimension(R.styleable.BlurLayout_blk_cornerRadius, DEFAULT_CORNER_RADIUS);
-            mAlpha = a.getDimension(R.styleable.BlurLayout_blk_alpha, DEFAULT_ALPHA);
+            mAlpha = a.getFloat(R.styleable.BlurLayout_blk_alpha, DEFAULT_ALPHA);
         } finally {
             a.recycle();
         }
