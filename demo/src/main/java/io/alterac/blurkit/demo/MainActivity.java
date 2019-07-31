@@ -16,8 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
+        blurLayout = findViewById(R.id.blurLayout);
 
+        blurLayout.setLifecycleOwner(this);
         blurLayout.animate().translationY(movement).setDuration(1500).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -31,13 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        blurLayout.startBlur();
         blurLayout.lockView();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        blurLayout.pauseBlur();
     }
 }

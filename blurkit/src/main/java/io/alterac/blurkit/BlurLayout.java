@@ -1,6 +1,10 @@
 package io.alterac.blurkit;
 
 import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -9,6 +13,8 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Choreographer;
 import android.view.View;
@@ -23,7 +29,7 @@ import java.lang.ref.WeakReference;
  * and finds its relative position to the top parent to draw properly regardless of where the layout is
  * placed.
  */
-public class BlurLayout extends FrameLayout {
+public class BlurLayout extends FrameLayout implements LifecycleObserver {
 
     public static final float DEFAULT_DOWNSCALE_FACTOR = 0.12f;
     public static final int DEFAULT_BLUR_RADIUS = 12;
@@ -74,6 +80,10 @@ public class BlurLayout extends FrameLayout {
     /** A saved bitmap for the view to re-use when {@link #lockView()} called. */
     private Bitmap mLockedBitmap;
 
+    /** A {@link Lifecycle} for this layout. **/
+    @Nullable
+    private Lifecycle mLifecycle;
+
     public BlurLayout(Context context) {
         super(context, null);
     }
@@ -107,6 +117,36 @@ public class BlurLayout extends FrameLayout {
         setCornerRadius(mCornerRadius);
     }
 
+    /**
+     * Sets the {@link LifecycleOwner} for this layout. No need to call {@link #startBlur()}
+     * or {@link #pauseBlur()}.
+     *
+     * Since this works due to {@link LifecycleObserver} which relies on {@link OnLifecycleEvent}
+     * annotated methods, it is not advisable to use this while using Java 8
+     *
+     * @param lifecycleOwner the LifecycleOwner for this layout
+     */
+    public void setLifecycleOwner(@NonNull LifecycleOwner lifecycleOwner) {
+        if (mLifecycle != null) {
+            mLifecycle.removeObserver(this);
+        }
+        mLifecycle = lifecycleOwner.getLifecycle();
+        mLifecycle.addObserver(this);
+    }
+
+    /**
+     * Get the {@link Lifecycle} associated with this layout. This is only applicable if
+     * we have set the {@link LifecycleOwner}.
+     *
+     * @see #setLifecycleOwner(LifecycleOwner)
+     *
+     * @return the Lifecycle associated with this layout, {@code null} if no Lifecyle is associated
+     */
+    @Nullable
+    public Lifecycle getLifecycle() {
+        return mLifecycle;
+    }
+
     /** Choreographer callback that re-draws the blur and schedules another callback. */
     private Choreographer.FrameCallback invalidationLoop = new Choreographer.FrameCallback() {
         @Override
@@ -117,6 +157,7 @@ public class BlurLayout extends FrameLayout {
     };
 
     /** Start BlurLayout continuous invalidation. **/
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void startBlur() {
         if (mRunning) {
             return;
@@ -129,6 +170,7 @@ public class BlurLayout extends FrameLayout {
     }
 
     /** Pause BlurLayout continuous invalidation. **/
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void pauseBlur() {
         if (!mRunning) {
             return;
