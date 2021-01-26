@@ -299,14 +299,27 @@ public class BlurLayout extends FrameLayout {
      * @return View reference for whole activity.
      */
     private View getActivityView() {
-        Activity activity;
-        try {
-            activity = (Activity) getContext();
-        } catch (ClassCastException e) {
-            return null;
+        Activity activity = getActivity(getContext());
+        if (activity == null) {
+            return null
         }
-
         return activity.getWindow().getDecorView().findViewById(android.R.id.content);
+    }
+
+    /**
+     * Casts context to Activity
+     * @param context
+     * @return
+     */
+    private Activity getActivity(Context context) {
+        if (context == null) {
+            return null;
+        } else if (context instanceof Activity) {
+            return (Activity) context;
+        } else if (context instanceof ContextWrapper) {
+            return getActivity(((ContextWrapper) context).getBaseContext());
+        }
+        return null;
     }
 
     /**
