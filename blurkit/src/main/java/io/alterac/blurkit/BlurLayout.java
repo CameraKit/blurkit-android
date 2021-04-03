@@ -2,6 +2,7 @@ package io.alterac.blurkit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -301,12 +302,26 @@ public class BlurLayout extends FrameLayout {
     private View getActivityView() {
         Activity activity;
         try {
-            activity = (Activity) getContext();
+            activity = getActivity();
         } catch (ClassCastException e) {
             return null;
         }
 
         return activity.getWindow().getDecorView().findViewById(android.R.id.content);
+    }
+
+    /**
+     * Casts context to Activity if context is a View or not.
+     */
+    private Activity getActivity() {
+        Context context = this.getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 
     /**
