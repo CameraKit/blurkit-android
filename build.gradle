@@ -2,12 +2,14 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://repo.grails.org/grails/core/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
+        classpath 'com.android.tools.build:gradle:8.12.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
@@ -17,7 +19,9 @@ allprojects { project ->
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://repo.grails.org/grails/core/" }
     }
 
     ext {
